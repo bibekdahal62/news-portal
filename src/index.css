@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+:root {
+  --primary-color: #4f46e5;
+  --hover-color: #3b82f6;
+}
+
+.nav-styles {
+  @apply text-white font-semibold px-5 py-3 hover:bg-red-500;
+}
+
+.text-hover:hover {
+  color: var(--hover-color);
+}
