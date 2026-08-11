@@ -32,14 +32,14 @@ function Home() {
   return (
     <main className="min-h-screen mt-4">
       <section>
-        <div>
+        <div className="p-6 my-8">
           <PinnedNews news={news} />
         </div>
-        <div className="container mx-auto flex flex-col md:flex-row gap-10">
+        <div className="container mx-auto mt-10 lg:px-10 flex flex-col-reverse xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
             <NewsContainer newsData={news} />
           </div>
-          <div>
+          <div className="p-4">
             <Trending />
             <div className="max-w-lg">
               <Banner />

@@ -4,6 +4,8 @@ function Banner() {
   const banners = [
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+    "https://images.unsplash.com/photo-1500534623283-312aade485b7?w=600&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=600&h=300&fit=crop",
   ];
 
   const [current, setCurrent] = useState(0);
@@ -22,7 +24,7 @@ function Banner() {
       <img
         src={banners[current]}
         alt={`Banner ${current + 1}`}
-        className="w-full h-full object-cover"
+        className="w-full h-full"
       />
 
       {/* Overlay */}
