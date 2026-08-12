@@ -14,6 +14,8 @@ const translations = {
     about: "About",
     contact: "Contact",
     search: "Search",
+    economic: "Economic",
+    entertainment: "Entertainment",
 
     // Footer
     company: "Company",
@@ -38,6 +40,8 @@ const translations = {
     about: "हाम्रो बारेमा",
     contact: "सम्पर्क",
     search: "खोज्नुहोस्",
+    economic: "अर्थ",
+    entertainment: "मनोरञ्जन",
 
     // Footer
     company: "कम्पनी",

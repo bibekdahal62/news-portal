@@ -14,14 +14,6 @@ function Header() {
     <header className="shadow-lg">
       <div className="bg-(--primary-color)">
         <div className="container mx-auto">
-          {/* <p className="px-4 mx-4 xl:px-2 xl:mx-0 py-3 text-white font-semibold">
-            {new Date().toLocaleDateString("ne-NP", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p> */}
           <DateDisplay />
         </div>
       </div>
@@ -58,24 +50,39 @@ function Header() {
             <Link to={"/"} className="nav-styles">
               {t.home}
             </Link>
+
             <Link to={"/news"} className="nav-styles">
               {t.news}
             </Link>
-            <Link to={"/politics"} className="nav-styles">
+
+            <Link to="/news/economy" className="nav-styles">
+              {t.economic}
+            </Link>
+
+            <Link to={"/news/politics"} className="nav-styles">
               {t.politics}
             </Link>
-            <Link to={"/local"} className="nav-styles">
+
+            <Link to={"/news/local"} className="nav-styles">
               {t.local}
             </Link>
-            <Link to={"/sports"} className="nav-styles">
+
+            <Link to={"/news/sports"} className="nav-styles">
               {t.sports}
             </Link>
-            <Link to={"/international"} className="nav-styles">
+
+            <Link to="/news/entertainment" className="nav-styles">
+              {t.entertainment}
+            </Link>
+
+            <Link to={"/news/international"} className="nav-styles">
               {t.international}
             </Link>
+
             <Link to={"/about"} className="nav-styles">
               {t.about}
             </Link>
+
             <Link to={"/contact"} className="nav-styles">
               {t.contact}
             </Link>
@@ -93,19 +100,27 @@ function Header() {
                 {t.news}
               </Link>
 
-              <Link to="/politics" className="text-hover">
+              <Link to="/news/economy" className="text-hover">
+                {t.economic}
+              </Link>
+
+              <Link to="/news/politics" className="text-hover">
                 {t.politics}
               </Link>
 
-              <Link to="/local" className="text-hover">
+              <Link to="/news/local" className="text-hover">
                 {t.local}
               </Link>
 
-              <Link to="/sports" className="text-hover">
+              <Link to="/news/sports" className="text-hover">
                 {t.sports}
               </Link>
 
-              <Link to="/international" className="text-hover">
+              <Link to="/news/entertainment" className="text-hover">
+                {t.entertainment}
+              </Link>
+
+              <Link to="/news/international" className="text-hover">
                 {t.international}
               </Link>
 

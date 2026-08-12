@@ -2,26 +2,35 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/home";
+import HomePage from "./pages/home";
+import NewsPage from "./pages/news";
 
 function App() {
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/news" element={<h1>This is news page</h1>} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/news" element={<NewsPage category={"समाचार"} />} />
+        <Route path="/news/economy" element={<NewsPage category={"अर्थ"} />} />
+        <Route
+          path="/news/politics"
+          element={<NewsPage category={"राजनीति"} />}
+        />
+        <Route path="/news/local" element={<NewsPage category={"स्थानिय"} />} />
+        <Route path="/news/sports" element={<NewsPage category={"खेलकुद"} />} />
+        <Route
+          path="/news/entertainment"
+          element={<NewsPage category={"मनोरञ्जन"} />}
+        />
+        <Route
+          path="/news/international"
+          element={<NewsPage category={"अन्तर्राष्ट्रिय"} />}
+        />
         <Route path="/contact" element={<h1>This is contact page</h1>} />
         <Route path="/about" element={<h1>This is about page</h1>} />
         <Route path="/privacy" element={<h1>This is privacy policy page</h1>} />
         <Route path="/terms" element={<h1>This is terms page</h1>} />
-        <Route path="/politics" element={<h1>This is politics page</h1>} />
-        <Route path="/local" element={<h1>This is local page</h1>} />
-        <Route path="/sports" element={<h1>This is sports page</h1>} />
-        <Route
-          path="/international"
-          element={<h1>This is international page</h1>}
-        />
       </Routes>
       <Footer />
     </>
