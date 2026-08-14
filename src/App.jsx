@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home";
 import NewsPage from "./pages/news";
 import AboutPage from "./pages/about";
+import ContactPage from "./pages/contact";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
           path="/news/international"
           element={<NewsPage category={"अन्तर्राष्ट्रिय"} />}
         />
-        <Route path="/contact" element={<h1>This is contact page</h1>} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/privacy" element={<h1>This is privacy policy page</h1>} />
         <Route path="/terms" element={<h1>This is terms page</h1>} />
