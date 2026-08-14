@@ -2,9 +2,10 @@ import NewsContainer from "../components/NewsContainer";
 import Trending from "../components/TrendingNews";
 import Banner from "../components/Banner";
 import { useNews } from "../context/NewsContext";
+import AdBanner from "../components/AdBanner";
 
 function NewsPage({ category }) {
-  const { news } = useNews();
+  const { news, getNewsByCategory } = useNews();
 
   if (!category)
     return (
@@ -13,22 +14,23 @@ function NewsPage({ category }) {
       </div>
     );
 
-  const displayNews = news.filter((n) => n.category === category);
+  const displayNews = getNewsByCategory(category);
 
   return (
     <main>
       <section>
-        <div className="container mx-auto mt-10 lg:px-10 flex flex-col-reverse xl:flex-row justify-center xl:gap-10 gap-6">
+        <div className="container mx-auto mt-10 lg:px-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
             <div className="px-10">
               <h3 className="text-3xl font-bold">{category}</h3>
             </div>
             <NewsContainer newsData={displayNews} />
           </div>
-          <div className="p-4">
+          <div>
             <div className="xl:max-w-lg">
-              <Banner />
-              <Banner />
+              <div className="mt-4 xl:max-w-lg">
+                <AdBanner slot="home-side" />
+              </div>
             </div>
           </div>
         </div>

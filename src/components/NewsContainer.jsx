@@ -1,4 +1,5 @@
 import NewsCard from "./NewsCard";
+import { displayTime } from "../utils/time";
 
 function NewsContainer({ newsData, limit }) {
   const displayedNews = parseInt(limit)
@@ -15,7 +16,7 @@ function NewsContainer({ newsData, limit }) {
             image={news.image}
             headline={news.headline}
             description={news.description}
-            time={news.time}
+            time={displayTime(news)}
             href={news.href}
           />
         ))}

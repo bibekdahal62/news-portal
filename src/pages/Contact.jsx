@@ -1,4 +1,5 @@
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import { useState } from "react";
 
 const contactInfo = [
   {
@@ -19,8 +20,31 @@ const contactInfo = [
 ];
 
 function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
+
+    console.log(formData);
   };
 
   return (
@@ -76,9 +100,12 @@ function ContactPage() {
                 </label>
                 <input
                   id="name"
+                  name="name"
                   type="text"
                   required
                   placeholder="तपाईंको नाम"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm outline-none focus:border-(--primary-color)"
                 />
               </div>
@@ -92,9 +119,12 @@ function ContactPage() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm outline-none focus:border-(--primary-color)"
                 />
               </div>
@@ -109,8 +139,11 @@ function ContactPage() {
               </label>
               <input
                 id="subject"
+                name="subject"
                 type="text"
                 placeholder="विषय लेख्नुहोस्"
+                value={formData.subject}
+                onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm outline-none focus:border-(--primary-color)"
               />
             </div>
@@ -124,9 +157,12 @@ function ContactPage() {
               </label>
               <textarea
                 id="message"
+                name="message"
                 rows={5}
                 required
                 placeholder="तपाईंको सन्देश यहाँ लेख्नुहोस्..."
+                value={formData.message}
+                onChange={handleChange}
                 className="w-full resize-none rounded-md border border-gray-300 px-4 py-2 text-sm outline-none focus:border-(--primary-color)"
               />
             </div>

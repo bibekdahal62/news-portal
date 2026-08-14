@@ -5,6 +5,7 @@ import NewsContainer from "../components/NewsContainer";
 import Trending from "../components/TrendingNews";
 import Banner from "../components/Banner";
 import PinnedNews from "../components/PinnedNews";
+import AdBanner from "../components/AdBanner";
 import { useNews } from "../context/NewsContext";
 
 function HomePage() {
@@ -24,22 +25,29 @@ function HomePage() {
 
           {!loading && !error && <PinnedNews news={news} />}
         </div>
-        <div className="container mx-auto mt-10 lg:px-10 flex flex-col-reverse xl:flex-row justify-center xl:gap-10 gap-6">
+        <div className="container mx-auto my-6 px-10">
+          <AdBanner slot="home-top" />
+        </div>
+        <div className="container mx-auto mt-10 lg:px-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
             {!loading && !error && (
               <div>
                 <div className="px-10">
                   <h3 className="text-3xl font-bold">ताजा समाचार</h3>
                 </div>
-
                 <NewsContainer newsData={news} limit={8} />
+                <div className="container mx-auto my-6 px-10">
+                  <AdBanner slot="home-bottom" />
+                </div>
               </div>
             )}
           </div>
-          <div className="p-4">
+          <div>
             <Trending />
             <div className="xl:max-w-lg">
-              <Banner />
+              <div className="mt-4">
+                <AdBanner slot="home-side" />
+              </div>
             </div>
           </div>
         </div>

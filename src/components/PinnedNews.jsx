@@ -1,4 +1,5 @@
 import NewsCard from "./NewsCard";
+import { displayTime } from "../utils/time";
 
 function PinnedNews({ news }) {
   const rochakNews = news.filter((n) => n.category === "रोचक");
@@ -15,7 +16,7 @@ function PinnedNews({ news }) {
             image={news.image}
             headline={news.headline}
             description={news.description}
-            time={news.time}
+            time={displayTime(news)}
             href={news.href}
           />
         ) : (

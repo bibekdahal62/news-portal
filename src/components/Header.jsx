@@ -79,6 +79,10 @@ function Header() {
               {t.international}
             </Link>
 
+            <Link to={"/videos"} className="nav-styles">
+              {t.videos}
+            </Link>
+
             <Link to={"/about"} className="nav-styles">
               {t.about}
             </Link>
@@ -122,6 +126,10 @@ function Header() {
 
               <Link to="/news/international" className="text-hover">
                 {t.international}
+              </Link>
+
+              <Link to="/videos" className="text-hover">
+                {t.videos}
               </Link>
 
               <Link to="/about" className="text-hover">
