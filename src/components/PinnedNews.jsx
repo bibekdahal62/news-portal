@@ -7,7 +7,7 @@ function PinnedNews({ news }) {
   // console.log(rochakNews);
 
   return (
-    <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="container mx-auto px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {rochakNews.map((news, index) =>
         index <= 2 ? (
           <NewsCard

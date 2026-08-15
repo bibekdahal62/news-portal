@@ -7,7 +7,7 @@ function Trending() {
   const trendingItems = getNewsByCategory("रोचक");
 
   return (
-    <aside className="sticky top-0 self-start w-full z-50">
+    <aside className="xl:sticky top-0 self-start w-full z-50">
       <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden w-full">
         {/* Header */}
         <div className="px-4 pt-4 pb-2">

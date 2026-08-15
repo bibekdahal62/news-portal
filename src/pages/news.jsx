@@ -19,19 +19,23 @@ function NewsPage({ category }) {
   return (
     <main>
       <section>
+        <div className="container mx-auto mt-12 px-10">
+          <AdBanner slot="home-top" />
+        </div>
         <div className="container mx-auto mt-10 lg:px-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
-            <div className="px-10">
-              <h3 className="text-3xl font-bold">{category}</h3>
+            <div className="shadow-lg rounded-lg border border-gray-100">
+              <div className="px-10 pt-6">
+                <h3 className="text-3xl font-bold">{category}</h3>
+              </div>
+              <NewsContainer newsData={displayNews} />
             </div>
-            <NewsContainer newsData={displayNews} />
+            <div className="container mx-auto mt-10">
+              <AdBanner slot="home-bottom" />
+            </div>
           </div>
           <div>
-            <div className="xl:max-w-lg">
-              <div className="mt-4 xl:max-w-lg">
-                <AdBanner slot="home-side" />
-              </div>
-            </div>
+            <AdBanner slot="home-side" />
           </div>
         </div>
       </section>

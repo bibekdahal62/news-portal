@@ -7,7 +7,7 @@ function NewsContainer({ newsData, limit }) {
     : newsData;
 
   return (
-    <section className="p-8 shadow-lg rounded-lg">
+    <section className="p-8">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
         {displayedNews.map((news, index) => (
           <NewsCard

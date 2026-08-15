@@ -10,7 +10,7 @@ function AdBanner({ slot }) {
   if (slotAds.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-4 mb-6 w-full">
+    <div className="flex flex-col gap-4 mb-6 w-full xl:min-w-sm shadow-lg">
       {slotAds.map((ad) => (
         <a
           key={ad.id}
@@ -19,7 +19,7 @@ function AdBanner({ slot }) {
           rel="noopener sponsored"
           className="block relative rounded-lg overflow-hidden shadow-sm border border-gray-100"
         >
-          <span className="absolute top-2 left-2 bg-black/60 text-white text-[10px] uppercase tracking-wide px-2 py-0.5 rounded">
+          <span className="absolute top-2 left-2 bg-black/60 text-white text-sm uppercase tracking-wide px-2 py-0.5 rounded">
             विज्ञापन
           </span>
           <img
@@ -28,7 +28,7 @@ function AdBanner({ slot }) {
             className={
               slot === "home-side"
                 ? `w-full object-contain h-full`
-                : `w-full object-contain max-h-40`
+                : `w-full object-cover max-h-64`
             }
           />
         </a>
