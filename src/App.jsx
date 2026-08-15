@@ -20,6 +20,7 @@ import AdminAdsList from "./pages/admin/AdminAdsList";
 import AdminAdForm from "./pages/admin/AdminAdForm";
 import AdminVideosList from "./pages/admin/AdminVideosList";
 import AdminVideoForm from "./pages/admin/AdminVideoForm";
+import AdminContactMessage from "./pages/admin/AdminContactMessage";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -86,6 +87,7 @@ function App() {
           <Route path="videos" element={<AdminVideosList />} />
           <Route path="videos/new" element={<AdminVideoForm />} />
           <Route path="videos/:id/edit" element={<AdminVideoForm />} />
+          <Route path="contact-messages" element={<AdminContactMessage />} />
         </Route>
       </Route>
     </Routes>

@@ -1,6 +1,8 @@
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import { useState } from "react";
 
+import { saveContactMessage } from "../utils/contactmessage";
+
 const contactInfo = [
   {
     icon: <FiPhone size={22} />,
@@ -37,14 +39,14 @@ function ContactPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    saveContactMessage(formData);
+
     setFormData({
       name: "",
       email: "",
       subject: "",
       message: "",
     });
-
-    console.log(formData);
   };
 
   return (

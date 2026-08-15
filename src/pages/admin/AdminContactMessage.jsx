@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getContactMessages, deleteContactMessage } from "./contactmessage";
+import {
+  getContactMessages,
+  deleteContactMessage,
+} from "../../utils/contactmessage";
 
 function AdminContactMessage() {
   const [messages, setMessages] = useState([]);
@@ -56,7 +59,7 @@ function AdminContactMessage() {
 
                 <button
                   onClick={() => handleDelete(item.id)}
-                  className="px-3 py-1.5 rounded-md bg-red-500 text-white text-xs font-medium hover:bg-red-600"
+                  className="px-3 py-1.5 rounded-md bg-red-500 text-white text-xs font-medium hover:bg-red-600 cursor-pointer"
                 >
                   Delete
                 </button>

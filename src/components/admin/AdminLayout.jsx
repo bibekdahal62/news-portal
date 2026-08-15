@@ -7,6 +7,7 @@ import {
   MdOutlineVideoLibrary,
   MdLogout,
   MdOutlineOpenInNew,
+  MdMessage,
 } from "react-icons/md";
 
 const navItems = [
@@ -14,6 +15,7 @@ const navItems = [
   { to: "/admin/news", label: "समाचार", icon: MdArticle },
   { to: "/admin/ads", label: "विज्ञापन", icon: MdOutlineCampaign },
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
+  { to: "/admin/contact-messages", label: "सन्देश", icon: MdMessage },
 ];
 
 function AdminLayout() {

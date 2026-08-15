@@ -38,9 +38,8 @@ function Header() {
         <div>
           {/* Logo + Right Side */}
           <div className="flex justify-between items-center my-4 mx-4 px-4 xl:mx-0 xl:px-2">
-
             {/* Logo */}
-            <Link to="/">
+            <Link to="/" onClick={() => setIsMenuOpen(false)}>
               <h1 className="text-3xl text-(--primary-color) font-bold my-4">
                 {t.title}
               </h1>
@@ -48,15 +47,15 @@ function Header() {
 
             {/* Right Side */}
             <div className="flex flex-col items-end gap-2">
-
               {/* Language Switcher */}
-              <LanguageSwitcher />
+              <div className="hidden sm:inline-block">
+                <LanguageSwitcher />
+              </div>
 
               {/* Search + Hamburger */}
               <div className="flex items-center gap-2">
-
                 {/* Search Bar */}
-                <div className="relative">
+                <div className="relative hidden lg:inline-block">
                   <input
                     type="text"
                     placeholder={t.search}
@@ -76,108 +75,191 @@ function Header() {
                 >
                   {isMenuOpen ? <FiX /> : <FiMenu />}
                 </button>
-
               </div>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden mx-4 px-2 xl:mx-2 lg:flex items-center justify-between rounded-t-lg bg-(--primary-color)">
-            
-            <Link to="/" className="nav-styles">
+            <Link
+              to="/"
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.home}
             </Link>
 
-            <Link to={"/news"} className="nav-styles">
+            <Link
+              to={"/news"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.news}
             </Link>
 
-            <Link to="/news/economy" className="nav-styles">
+            <Link
+              to="/news/economy"
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.economic}
             </Link>
 
-            <Link to={"/news/politics"} className="nav-styles">
+            <Link
+              to={"/news/politics"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.politics}
             </Link>
 
-            <Link to={"/news/local"} className="nav-styles">
+            <Link
+              to={"/news/local"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.local}
             </Link>
 
-            <Link to={"/news/sports"} className="nav-styles">
+            <Link
+              to={"/news/sports"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.sports}
             </Link>
 
-            <Link to="/news/entertainment" className="nav-styles">
+            <Link
+              to="/news/entertainment"
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.entertainment}
             </Link>
 
-            <Link to={"/news/international"} className="nav-styles">
+            <Link
+              to={"/news/international"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.international}
             </Link>
 
-            <Link to={"/videos"} className="nav-styles">
+            <Link
+              to={"/videos"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.videos}
             </Link>
 
-            <Link to={"/about"} className="nav-styles">
+            <Link
+              to={"/about"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.about}
             </Link>
 
-            <Link to={"/contact"} className="nav-styles">
+            <Link
+              to={"/contact"}
+              className="nav-styles"
+              onClick={() => setIsMenuOpen(false)}
+            >
               {t.contact}
             </Link>
-
           </nav>
 
           {/* Tablet / Mobile Navigation */}
           {isMenuOpen && (
             <nav className="lg:hidden px-4 mb-4 flex flex-col gap-4 font-semibold items-start">
-
-              <Link to="/" className="text-hover">
+              <Link
+                to="/"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.home}
               </Link>
 
-              <Link to="/news" className="text-hover">
+              <Link
+                to="/news"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.news}
               </Link>
 
-              <Link to="/news/economy" className="text-hover">
+              <Link
+                to="/news/economy"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.economic}
               </Link>
 
-              <Link to="/news/politics" className="text-hover">
+              <Link
+                to="/news/politics"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.politics}
               </Link>
 
-              <Link to="/news/local" className="text-hover">
+              <Link
+                to="/news/local"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.local}
               </Link>
 
-              <Link to="/news/sports" className="text-hover">
+              <Link
+                to="/news/sports"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.sports}
               </Link>
 
-              <Link to="/news/entertainment" className="text-hover">
+              <Link
+                to="/news/entertainment"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.entertainment}
               </Link>
 
-              <Link to="/news/international" className="text-hover">
+              <Link
+                to="/news/international"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.international}
               </Link>
 
-              <Link to="/videos" className="text-hover">
+              <Link
+                to="/videos"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.videos}
               </Link>
 
-              <Link to="/about" className="text-hover">
+              <Link
+                to="/about"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.about}
               </Link>
 
-              <Link to="/contact" className="text-hover">
+              <Link
+                to="/contact"
+                className="text-hover"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {t.contact}
               </Link>
-
             </nav>
           )}
         </div>
