@@ -2,11 +2,7 @@ import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { useAds } from "../../context/AdsContext";
 import { useVideos } from "../../context/VideoContext";
-import {
-  MdArticle,
-  MdOutlineCampaign,
-  MdOutlineVideoLibrary,
-} from "react-icons/md";
+import { MdArticle, MdOutlineCampaign, MdOutlineVideoLibrary } from "react-icons/md";
 
 function StatCard({ icon: Icon, label, value, to }) {
   return (
@@ -33,29 +29,17 @@ function AdminDashboard() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-1">ड्यासबोर्ड</h1>
-      <p className="text-gray-500 mb-6">
-        तपाईंको न्युज पोर्टलको संक्षिप्त विवरण
-      </p>
+      <p className="text-gray-500 mb-6">तपाईंको न्युज पोर्टलको संक्षिप्त विवरण</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <StatCard
-          icon={MdArticle}
-          label="कुल समाचार"
-          value={news.length}
-          to="/admin/news"
-        />
+        <StatCard icon={MdArticle} label="कुल समाचार" value={news.length} to="/admin/news" />
         <StatCard
           icon={MdOutlineCampaign}
           label="सक्रिय विज्ञापन"
           value={ads.filter((a) => a.active).length}
           to="/admin/ads"
         />
-        <StatCard
-          icon={MdOutlineVideoLibrary}
-          label="भिडियोहरू"
-          value={videos.length}
-          to="/admin/videos"
-        />
+        <StatCard icon={MdOutlineVideoLibrary} label="भिडियोहरू" value={videos.length} to="/admin/videos" />
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">

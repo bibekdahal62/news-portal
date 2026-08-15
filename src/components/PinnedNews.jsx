@@ -1,12 +1,13 @@
 import NewsCard from "./NewsCard";
+import { displayTime } from "../utils/time";
 
 function PinnedNews({ news }) {
   const rochakNews = news.filter((n) => n.category === "रोचक");
 
-  console.log(rochakNews);
+  // console.log(rochakNews);
 
   return (
-    <div className="container mt-12 mb-6 mx-auto grid grid-cols-3 gap-6">
+    <div className="container mx-auto px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {rochakNews.map((news, index) =>
         index <= 2 ? (
           <NewsCard
@@ -15,7 +16,7 @@ function PinnedNews({ news }) {
             image={news.image}
             headline={news.headline}
             description={news.description}
-            time={news.time}
+            time={displayTime(news)}
             href={news.href}
           />
         ) : (

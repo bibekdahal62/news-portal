@@ -4,7 +4,7 @@ function NewsCard({ category, image, headline, description, time, href }) {
   return (
     <Link
       to={href}
-      className="block bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden no-underline hover:no-underline group hover:shadow-md transition-shadow max-w-md"
+      className="block bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden no-underline hover:no-underline group hover:shadow-md transition-shadow"
     >
       {/* 1 + 2: Category badge + Image */}
       <div className="relative">

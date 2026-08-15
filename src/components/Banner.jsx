@@ -4,6 +4,8 @@ function Banner() {
   const banners = [
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+    "https://images.unsplash.com/photo-1500534623283-312aade485b7",
+    "https://images.unsplash.com/photo-1473116763249-2faaef81ccda",
   ];
 
   const [current, setCurrent] = useState(0);
@@ -17,12 +19,12 @@ function Banner() {
   }, [banners.length]);
 
   return (
-    <section className="relative w-full overflow-hidden mt-10 rounded-lg">
+    <section className="relative overflow-hidden mt-10 rounded-lg">
       {/* Banner Image */}
       <img
         src={banners[current]}
         alt={`Banner ${current + 1}`}
-        className="w-full h-full object-cover"
+        className="w-full h-full"
       />
 
       {/* Overlay */}

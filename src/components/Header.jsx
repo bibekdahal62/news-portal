@@ -88,7 +88,7 @@ function Header() {
               {t.home}
             </Link>
 
-            <Link to="/news" className="nav-styles">
+            <Link to={"/news"} className="nav-styles">
               {t.news}
             </Link>
 
@@ -96,15 +96,15 @@ function Header() {
               {t.economic}
             </Link>
 
-            <Link to="/news/politics" className="nav-styles">
+            <Link to={"/news/politics"} className="nav-styles">
               {t.politics}
             </Link>
 
-            <Link to="/news/local" className="nav-styles">
+            <Link to={"/news/local"} className="nav-styles">
               {t.local}
             </Link>
 
-            <Link to="/news/sports" className="nav-styles">
+            <Link to={"/news/sports"} className="nav-styles">
               {t.sports}
             </Link>
 
@@ -112,19 +112,19 @@ function Header() {
               {t.entertainment}
             </Link>
 
-            <Link to="/news/international" className="nav-styles">
+            <Link to={"/news/international"} className="nav-styles">
               {t.international}
             </Link>
 
-            <Link to="/videos" className="nav-styles">
+            <Link to={"/videos"} className="nav-styles">
               {t.videos}
             </Link>
 
-            <Link to="/about" className="nav-styles">
+            <Link to={"/about"} className="nav-styles">
               {t.about}
             </Link>
 
-            <Link to="/contact" className="nav-styles">
+            <Link to={"/contact"} className="nav-styles">
               {t.contact}
             </Link>
 

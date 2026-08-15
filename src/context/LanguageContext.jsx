@@ -14,6 +14,9 @@ const translations = {
     about: "About",
     contact: "Contact",
     search: "Search",
+    economic: "Economic",
+    entertainment: "Entertainment",
+    videos: "Videos",
 
     // Footer
     company: "Company",
@@ -25,6 +28,20 @@ const translations = {
     phone: "+977-9700000000",
     location: "Biratnagar, Nepal",
     copyright: "All rights reserved.",
+
+    // Contact page
+    contactHeading: "Contact Us",
+    contactSubheading: "Have a tip, feedback, or question? Send us a message.",
+    formName: "Full Name",
+    formEmail: "Email Address",
+    formSubject: "Subject",
+    formMessage: "Message",
+    formSend: "Send Message",
+    formSending: "Sending...",
+    formSuccessTitle: "Message sent",
+    formSuccessBody: "Thanks for reaching out — we'll get back to you soon.",
+    formErrorRequired: "Please fill in all fields.",
+    formSendAnother: "Send another message",
   },
 
   ne: {
@@ -38,6 +55,9 @@ const translations = {
     about: "हाम्रो बारेमा",
     contact: "सम्पर्क",
     search: "खोज्नुहोस्",
+    economic: "अर्थ",
+    entertainment: "मनोरञ्जन",
+    videos: "भिडियो",
 
     // Footer
     company: "कम्पनी",
@@ -50,6 +70,20 @@ const translations = {
     phone: "+९७७-९७००००००००",
     location: "विराटनगर, नेपाल",
     copyright: "सर्वाधिकार सुरक्षित।",
+
+    // Contact page
+    contactHeading: "सम्पर्क गर्नुहोस्",
+    contactSubheading: "कुनै जानकारी, सुझाव वा प्रश्न छ भने हामीलाई सन्देश पठाउनुहोस्।",
+    formName: "पूरा नाम",
+    formEmail: "इमेल ठेगाना",
+    formSubject: "विषय",
+    formMessage: "सन्देश",
+    formSend: "सन्देश पठाउनुहोस्",
+    formSending: "पठाइँदैछ...",
+    formSuccessTitle: "सन्देश पठाइयो",
+    formSuccessBody: "सम्पर्क गर्नुभएकोमा धन्यवाद — हामी चाँडै जवाफ दिनेछौं।",
+    formErrorRequired: "कृपया सबै फिल्डहरू भर्नुहोस्।",
+    formSendAnother: "अर्को सन्देश पठाउनुहोस्",
   },
 };
 
