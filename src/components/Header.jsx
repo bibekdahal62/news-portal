@@ -27,33 +27,51 @@ function Header() {
       </div>
       <div className="container mx-auto flex flex-col">
         <div>
-          <div className="flex justify-between items-center my-4 mx-4 px-4 xl:mx-0 xl:px-2">
-            <Link to={"/"}>
-              <h1 className="text-3xl text-(--primary-color) font-bold my-4">
-                {t.title}
-              </h1>
-            </Link>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder={t.search}
-                className="hidden lg:inline-block px-4 py-2 pr-10 border border-gray-300 outline-none rounded-full"
-              />
-              <CiSearch
-                size={22}
-                className="hidden lg:inline-block absolute right-3 top-0 translate-y-1/2"
-              />
-            </div>
-            <button
-              className="lg:hidden text-2xl cursor-pointer"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <FiX /> : <FiMenu />}
-            </button>
-            <div>
-              <LanguageSwitcher />
-            </div>
-          </div>
+        <div className="flex justify-between items-center my-4 mx-4 px-4 xl:mx-0 xl:px-2">
+
+  {/* Logo */}
+  <Link to="/">
+    <h1 className="text-3xl text-(--primary-color) font-bold my-4">
+      {t.title}
+    </h1>
+  </Link>
+
+  {/* Right side */}
+  <div className="flex flex-col items-end gap-2">
+
+    {/* Language Switcher */}
+    <LanguageSwitcher />
+
+    {/* Search + Hamburger */}
+    <div className="flex items-center gap-2">
+
+      {/* Search Bar */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder={t.search}
+          className="w-40 sm:w-52 lg:w-64 px-4 py-2 pr-10 border border-gray-300 outline-none rounded-full"
+        />
+
+        <CiSearch
+          size={22}
+          className="absolute right-3 top-1/2 -translate-y-1/2"
+        />
+      </div>
+
+      {/* Hamburger */}
+      <button 
+  className="text-3xl cursor-pointer lg:hidden" 
+  onClick={() => setIsMenuOpen(!isMenuOpen)} 
+>
+  {isMenuOpen ? <FiX /> : <FiMenu />}
+</button>
+
+    </div>
+
+  </div>
+
+</div>
           <nav className="hidden mx-4 px-2 xl:mx-2 lg:flex items-center justify-between rounded-t-lg bg-(--primary-color)">
             <Link to={"/"} className="nav-styles">
               {t.home}
