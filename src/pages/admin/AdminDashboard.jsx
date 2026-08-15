@@ -63,6 +63,12 @@ function AdminDashboard() {
           >
             + नयाँ भिडियो
           </Link>
+          <Link
+            to="/admin/contact_message"
+            className="px-4 py-2 rounded-md border border-(--primary-color) text-(--primary-color) text-sm font-medium hover:bg-red-500"
+          >
+            सन्देश
+          </Link>
         </div>
       </div>
     </div>
