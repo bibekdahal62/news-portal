@@ -21,7 +21,9 @@ function AdminNewsList() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">समाचार व्यवस्थापन</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            समाचार व्यवस्थापन
+          </h1>
           <p className="text-gray-500">जम्मा {news.length} समाचार</p>
         </div>
         <Link
@@ -40,8 +42,8 @@ function AdminNewsList() {
         className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 mb-4 outline-none focus:ring-2 focus:ring-(--primary-color)"
       />
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
+        <table className="w-full min-w-[560px] text-sm">
           <thead className="bg-gray-50 text-gray-500 text-left">
             <tr>
               <th className="px-4 py-3 font-medium">समाचार</th>
@@ -59,7 +61,9 @@ function AdminNewsList() {
                       alt={item.headline}
                       className="w-14 h-10 object-cover rounded shrink-0"
                     />
-                    <span className="line-clamp-2 text-gray-900">{item.headline}</span>
+                    <span className="line-clamp-2 text-gray-900 max-w-[220px] sm:max-w-none">
+                      {item.headline}
+                    </span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -90,7 +94,10 @@ function AdminNewsList() {
 
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={3} className="px-4 py-10 text-center text-gray-400">
+                <td
+                  colSpan={3}
+                  className="px-4 py-10 text-center text-gray-400"
+                >
                   कुनै समाचार फेला परेन।
                 </td>
               </tr>
@@ -102,9 +109,12 @@ function AdminNewsList() {
       {confirmId !== null && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-            <h3 className="font-semibold text-gray-900 mb-2">मेटाउने पुष्टि गर्नुहोस्</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">
+              मेटाउने पुष्टि गर्नुहोस्
+            </h3>
             <p className="text-sm text-gray-500 mb-5">
-              के तपाईं यो समाचार मेटाउन निश्चित हुनुहुन्छ? यो कार्य फिर्ता गर्न सकिँदैन।
+              के तपाईं यो समाचार मेटाउन निश्चित हुनुहुन्छ? यो कार्य फिर्ता गर्न
+              सकिँदैन।
             </p>
             <div className="flex justify-end gap-3">
               <button
