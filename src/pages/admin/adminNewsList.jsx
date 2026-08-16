@@ -61,7 +61,7 @@ function AdminNewsList() {
                       alt={item.headline}
                       className="w-14 h-10 object-cover rounded shrink-0"
                     />
-                    <span className="line-clamp-2 text-gray-900 max-w-[220px] sm:max-w-none">
+                    <span className="line-clamp-2 text-gray-900 max-w-55 sm:max-w-none">
                       {item.headline}
                     </span>
                   </div>
