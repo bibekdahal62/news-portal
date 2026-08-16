@@ -10,7 +10,9 @@ function AdminVideosList() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">भिडियो व्यवस्थापन</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            भिडियो व्यवस्थापन
+          </h1>
           <p className="text-gray-500">जम्मा {videos.length} भिडियो</p>
         </div>
         <Link

@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useAdminAuth } from "../../context/AdminAuthContext";
 import {
   MdDashboard,
   MdArticle,
@@ -11,7 +8,11 @@ import {
   MdMessage,
   MdMenu,
   MdClose,
+  MdPrivacyTip,
 } from "react-icons/md";
+import { useAdminAuth } from "../../context/AdminAuthContext";
+import { useNavigate, useLocation, NavLink, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { to: "/admin", label: "ड्यासबोर्ड", icon: MdDashboard, end: true },
@@ -19,6 +20,7 @@ const navItems = [
   { to: "/admin/ads", label: "विज्ञापन", icon: MdOutlineCampaign },
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
   { to: "/admin/contact-messages", label: "सन्देश", icon: MdMessage },
+  { to: "/admin/privacy", label: "गोपनीयता नीति", icon: MdPrivacyTip },
 ];
 
 function AdminLayout() {
@@ -103,7 +105,9 @@ function AdminLayout() {
       {/* Mobile drawer: slides in over the page, only rendered below lg */}
       <div
         className={`lg:hidden fixed inset-0 z-40 transition-opacity ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          menuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
       >
         <div

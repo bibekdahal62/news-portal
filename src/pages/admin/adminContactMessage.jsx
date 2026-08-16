@@ -1,15 +1,7 @@
-import { useEffect, useState } from "react";
-import {
-  getContactMessages,
-  deleteContactMessage,
-} from "../../utils/contactmessage";
+import { useContactMessages } from "../../context/ContactMessageContext";
 
 function AdminContactMessage() {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    setMessages(getContactMessages());
-  }, []);
+  const { messages, deleteMessage } = useContactMessages();
 
   const handleDelete = (id) => {
     const confirmDelete = window.confirm(
@@ -18,11 +10,7 @@ function AdminContactMessage() {
 
     if (!confirmDelete) return;
 
-    deleteContactMessage(id);
-
-    setMessages((prevMessages) =>
-      prevMessages.filter((message) => message.id !== id),
-    );
+    deleteMessage(id);
   };
 
   return (

@@ -4,23 +4,26 @@ import { Routes, Route, Outlet } from "react-router-dom";
 
 import HomePage from "./pages/home";
 import NewsPage from "./pages/news";
-import NewsDetail from "./pages/NewsDetail";
+import NewsDetail from "./pages/newsDetail";
 import AboutPage from "./pages/about";
-import ContactPage from "./pages/Contact";
-import VideosPage from "./pages/VideosPage";
-import VideoDetail from "./pages/VideoDetail";
+import ContactPage from "./pages/contact";
+import PrivacyPage from "./pages/privacy";
+import VideosPage from "./pages/videosPage";
+import VideoDetail from "./pages/videoDetail";
+import TermsPage from "./pages/terms";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminNewsList from "./pages/admin/AdminNewsList";
-import AdminNewsForm from "./pages/admin/AdminNewsForm";
-import AdminAdsList from "./pages/admin/AdminAdsList";
-import AdminAdForm from "./pages/admin/AdminAdForm";
-import AdminVideosList from "./pages/admin/AdminVideosList";
-import AdminVideoForm from "./pages/admin/AdminVideoForm";
-import AdminContactMessage from "./pages/admin/AdminContactMessage";
+import AdminLogin from "./pages/admin/adminLogin";
+import AdminDashboard from "./pages/admin/adminDashboard";
+import AdminNewsList from "./pages/admin/adminNewsList";
+import AdminNewsForm from "./pages/admin/adminNewsForm";
+import AdminAdsList from "./pages/admin/adminAdsList";
+import AdminAdForm from "./pages/admin/adminAdForm";
+import AdminVideosList from "./pages/admin/adminVideosList";
+import AdminVideoForm from "./pages/admin/adminVideoForm";
+import AdminContactMessage from "./pages/admin/adminContactMessage";
+import AdminPrivacy from "./pages/admin/adminPrivacy";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -66,8 +69,8 @@ function App() {
 
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/privacy" element={<h1>This is privacy policy page</h1>} />
-        <Route path="/terms" element={<h1>This is terms page</h1>} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Route>
 
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -88,6 +91,7 @@ function App() {
           <Route path="videos/new" element={<AdminVideoForm />} />
           <Route path="videos/:id/edit" element={<AdminVideoForm />} />
           <Route path="contact-messages" element={<AdminContactMessage />} />
+          <Route path="privacy" element={<AdminPrivacy />} />
         </Route>
       </Route>
     </Routes>

@@ -12,7 +12,9 @@ function AdminVideoForm() {
   const { getVideoById, addVideo, updateVideo } = useVideos();
 
   const existing = isEdit ? getVideoById(id) : null;
-  const [form, setForm] = useState(existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM);
+  const [form, setForm] = useState(
+    existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM,
+  );
   const [errorMsg, setErrorMsg] = useState("");
 
   if (isEdit && !existing) {
@@ -70,7 +72,9 @@ function AdminVideoForm() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">शीर्षक</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            शीर्षक
+          </label>
           <input
             type="text"
             value={form.title}
@@ -80,7 +84,9 @@ function AdminVideoForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">YouTube लिंक</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            YouTube लिंक
+          </label>
           <input
             type="url"
             value={form.youtubeUrl}
@@ -108,7 +114,9 @@ function AdminVideoForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">विवरण (वैकल्पिक)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            विवरण (वैकल्पिक)
+          </label>
           <textarea
             value={form.description}
             onChange={handleChange("description")}

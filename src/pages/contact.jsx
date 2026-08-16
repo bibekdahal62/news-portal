@@ -1,7 +1,7 @@
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import { useState } from "react";
 
-import { saveContactMessage } from "../utils/contactmessage";
+import { useContactMessages } from "../context/ContactMessageContext";
 
 const contactInfo = [
   {
@@ -22,12 +22,14 @@ const contactInfo = [
 ];
 
 function ContactPage() {
+  const { addMessage } = useContactMessages();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -39,7 +41,7 @@ function ContactPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    saveContactMessage(formData);
+    addMessage(formData);
 
     setFormData({
       name: "",
@@ -47,6 +49,7 @@ function ContactPage() {
       subject: "",
       message: "",
     });
+    setSubmitted(true);
   };
 
   return (
@@ -90,6 +93,12 @@ function ContactPage() {
           <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
             सन्देश पठाउनुहोस्
           </h2>
+
+          {submitted && (
+            <p className="mt-4 rounded-md border border-green-100 bg-green-50 px-4 py-2 text-sm text-green-700">
+              धन्यवाद! तपाईंको सन्देश पठाइयो।
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

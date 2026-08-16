@@ -14,7 +14,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" className="inline-block">
-              <h2 className="text-2xl font-bold tracking-tight">{t.title}</h2>
+              {/* <h2 className="text-2xl font-bold tracking-tight">{t.title}</h2>
+               */}
+              <div className="w-34 md:w-44 lg:w-54 h-auto">
+                <img src="/logo-nepali-white.png" alt="Logo" />
+              </div>
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-6 text-indigo-100">

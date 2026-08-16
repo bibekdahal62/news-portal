@@ -8,6 +8,8 @@ import { NewsProvider } from "./context/NewsContext.jsx";
 import { AdsProvider } from "./context/AdsContext.jsx";
 import { VideoProvider } from "./context/VideoContext.jsx";
 import { AdminAuthProvider } from "./context/AdminAuthContext.jsx";
+import { ContactMessageProvider } from "./context/ContactMessageContext.jsx";
+import { PrivacyProvider } from "./context/PrivacyContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -16,9 +18,13 @@ createRoot(document.getElementById("root")).render(
         <NewsProvider>
           <AdsProvider>
             <VideoProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
+              <ContactMessageProvider>
+                <PrivacyProvider>
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </PrivacyProvider>
+              </ContactMessageProvider>
             </VideoProvider>
           </AdsProvider>
         </NewsProvider>
