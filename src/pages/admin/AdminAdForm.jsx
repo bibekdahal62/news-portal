@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useAds } from "../../context/AdsContext";
+import { fileToDataUrl } from "../../utils/file";
 
 const EMPTY_FORM = {
   slot: "home-top",
@@ -40,6 +41,19 @@ function AdminAdForm() {
         [field]:
           e.target.type === "checkbox" ? e.target.checked : e.target.value,
       }));
+  }
+
+  async function handleImageChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setErrorMsg("");
+      const dataUrl = await fileToDataUrl(file);
+      setForm((f) => ({ ...f, image: dataUrl }));
+    } catch (err) {
+      setErrorMsg(err.message);
+    }
   }
 
   function handleSubmit(e) {
@@ -85,23 +99,20 @@ function AdminAdForm() {
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           >
             <option value="home-top">गृहपृष्ठ - समाचार सूची माथि</option>
-
             <option value="home-side">गृहपृष्ठ - समाचार सूची छेउमा</option>
-
             <option value="home-bottom">गृहपृष्ठ - समाचार सूची तल</option>
           </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            विज्ञापन तस्बिर URL
+            विज्ञापन तस्बिर
           </label>
           <input
-            type="url"
-            value={form.image}
-            onChange={handleChange("image")}
-            placeholder="https://..."
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-(--primary-color) file:text-white file:text-sm file:font-medium file:cursor-pointer cursor-pointer"
           />
           {form.image && (
             <img

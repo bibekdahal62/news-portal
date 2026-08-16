@@ -28,7 +28,7 @@ function AdBanner({ slot }) {
             className={
               slot === "home-side"
                 ? `w-full object-contain h-full`
-                : `w-full object-cover max-h-64`
+                : `w-full object-contain max-h-64`
             }
           />
         </a>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
+import { fileToDataUrl } from "../../utils/file";
 
 // Every category currently used across the site: the 7 that have their own
 // nav link/route, plus "रोचक" (used to pick the 3 pinned homepage cards)
@@ -31,7 +32,9 @@ function AdminNewsForm() {
   const { getNewsById, addNews, updateNews } = useNews();
 
   const existing = isEdit ? getNewsById(id) : null;
-  const [form, setForm] = useState(existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM);
+  const [form, setForm] = useState(
+    existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM,
+  );
   const [errorMsg, setErrorMsg] = useState("");
 
   if (isEdit && !existing) {
@@ -49,11 +52,28 @@ function AdminNewsForm() {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
   }
 
+  async function handleImageChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setErrorMsg("");
+      const dataUrl = await fileToDataUrl(file);
+      setForm((f) => ({ ...f, image: dataUrl }));
+    } catch (err) {
+      setErrorMsg(err.message);
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     setErrorMsg("");
 
-    if (!form.headline.trim() || !form.image.trim() || !form.description.trim()) {
+    if (
+      !form.headline.trim() ||
+      !form.image.trim() ||
+      !form.description.trim()
+    ) {
       setErrorMsg("कृपया सबै आवश्यक फिल्डहरू भर्नुहोस्।");
       return;
     }
@@ -83,7 +103,9 @@ function AdminNewsForm() {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">श्रेणी</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            श्रेणी
+          </label>
           <select
             value={form.category}
             onChange={handleChange("category")}
@@ -99,14 +121,13 @@ function AdminNewsForm() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            तस्बिर URL
+            तस्बिर
           </label>
           <input
-            type="url"
-            value={form.image}
-            onChange={handleChange("image")}
-            placeholder="https://..."
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-(--primary-color) file:text-white file:text-sm file:font-medium file:cursor-pointer cursor-pointer"
           />
           {form.image && (
             <img
@@ -119,7 +140,9 @@ function AdminNewsForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">शीर्षक</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            शीर्षक
+          </label>
           <input
             type="text"
             value={form.headline}
@@ -129,7 +152,9 @@ function AdminNewsForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">विवरण</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            विवरण
+          </label>
           <textarea
             value={form.description}
             onChange={handleChange("description")}

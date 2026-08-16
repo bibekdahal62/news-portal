@@ -41,9 +41,12 @@ function Header() {
             <div className="flex justify-between items-center my-4 mx-4 xl:mx-0 xl:px-2">
               {/* Logo */}
               <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                <h1 className="text-3xl text-(--primary-color) font-bold my-4">
+                {/* <h1 className="text-3xl text-(--primary-color) font-bold my-4">
                   {t.title}
-                </h1>
+                </h1> */}
+                <div className="w-44 md:w-52 lg:w-62.5 h-auto">
+                  <img src="/logo-nepali.png" alt="site logo" />
+                </div>
               </Link>
 
               {/* Right Side */}
