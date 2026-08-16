@@ -9,6 +9,7 @@ import AboutPage from "./pages/about";
 import ContactPage from "./pages/Contact";
 import VideosPage from "./pages/VideosPage";
 import VideoDetail from "./pages/VideoDetail";
+import PolicyRule from "./pages/PolicyRule";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
@@ -20,6 +21,7 @@ import AdminAdsList from "./pages/admin/AdminAdsList";
 import AdminAdForm from "./pages/admin/AdminAdForm";
 import AdminVideosList from "./pages/admin/AdminVideosList";
 import AdminVideoForm from "./pages/admin/AdminVideoForm";
+import AdminPolicyRule from "./pages/admin/AdminPolicyRule";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -65,8 +67,7 @@ function App() {
 
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/privacy" element={<h1>This is privacy policy page</h1>} />
-        <Route path="/terms" element={<h1>This is terms page</h1>} />
+        <Route path="/policy-rule" element={<PolicyRule />} />
       </Route>
 
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -86,6 +87,7 @@ function App() {
           <Route path="videos" element={<AdminVideosList />} />
           <Route path="videos/new" element={<AdminVideoForm />} />
           <Route path="videos/:id/edit" element={<AdminVideoForm />} />
+          <Route path="/admin/policy-rule" element={<AdminPolicyRule />}/>
         </Route>
       </Route>
     </Routes>

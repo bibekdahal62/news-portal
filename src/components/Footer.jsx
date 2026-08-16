@@ -49,19 +49,10 @@ export default function Footer() {
 
               <li>
                 <Link
-                  to="/privacy"
+                  to="/policy-rule"
                   className="text-indigo-100 transition hover:text-white"
                 >
                   {t.privacy}
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/terms"
-                  className="text-indigo-100 transition hover:text-white"
-                >
-                  {t.terms}
                 </Link>
               </li>
             </ul>

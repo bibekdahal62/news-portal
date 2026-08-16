@@ -14,6 +14,7 @@ const navItems = [
   { to: "/admin/news", label: "समाचार", icon: MdArticle },
   { to: "/admin/ads", label: "विज्ञापन", icon: MdOutlineCampaign },
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
+  { to: "/admin/policy-rule", label: "नीति/नियम", icon: MdArticle },
 ];
 
 function AdminLayout() {
