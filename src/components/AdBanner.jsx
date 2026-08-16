@@ -27,7 +27,7 @@ function AdBanner({ slot }) {
             alt={ad.alt || "Advertisement"}
             className={
               slot === "home-side"
-                ? `w-full object-contain h-full`
+                ? `w-full xl:max-w-md object-contain h-full`
                 : `w-full object-contain max-h-64`
             }
           />
