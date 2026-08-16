@@ -21,9 +21,9 @@ const values = [
 
 function AboutPage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen mx-6">
       {/* Hero */}
-      <section className=" container mt-10 mx-auto rounded-lg bg-(--primary-color) text-white">
+      <section className=" container mt-12 mx-auto rounded-lg bg-(--primary-color) text-white">
         <div className="container mx-auto px-6 py-16 text-center lg:px-10">
           <h1 className="text-3xl font-bold sm:text-4xl">हाम्रो बारेमा</h1>
           <p className="mx-auto mt-4 max-w-2xl text-md leading-relaxed text-indigo-100 sm:text-base">

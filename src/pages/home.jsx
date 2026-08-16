@@ -12,9 +12,9 @@ function HomePage() {
   const { news, loading, error } = useNews();
 
   return (
-    <main className="min-h-screen mt-4">
+    <main className="min-h-screen mt-12 mx-6">
       <section>
-        <div className="p-8">
+        <div className="mb-8">
           {loading && <p className="text-2xl text-center"> Loading News..</p>}
 
           {error && (
@@ -23,14 +23,14 @@ function HomePage() {
             </p>
           )}
 
-          <div className="container mx-auto mb-10 px-10">
+          <div className="container mx-auto mb-10">
             <AdBanner slot="home-top" />
           </div>
 
           {!loading && !error && <PinnedNews news={news} />}
         </div>
 
-        <div className="container mx-auto mt-4 lg:px-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
+        <div className="container mx-auto mt-4 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
             {!loading && !error && (
               <div>

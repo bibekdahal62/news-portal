@@ -17,12 +17,12 @@ function NewsPage({ category }) {
   const displayNews = getNewsByCategory(category);
 
   return (
-    <main>
+    <main className="mx-6">
       <section>
-        <div className="container mx-auto mt-12 px-10">
+        <div className="container mx-auto mt-12">
           <AdBanner slot="home-top" />
         </div>
-        <div className="container mx-auto mt-10 lg:px-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
+        <div className="container mx-auto mt-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
             <div className="shadow-lg rounded-lg border border-gray-100">
               <div className="px-10 pt-6">

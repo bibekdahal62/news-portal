@@ -50,9 +50,9 @@ function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen mx-6">
       {/* Hero */}
-      <section className=" container mx-auto mt-10 rounded-lg bg-(--primary-color) text-white">
+      <section className=" container mx-auto mt-12 rounded-lg bg-(--primary-color) text-white">
         <div className="container mx-auto px-6 py-16 text-center lg:px-10">
           <h1 className="text-3xl font-bold sm:text-4xl">सम्पर्क गर्नुहोस्</h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-indigo-100 sm:text-base">
