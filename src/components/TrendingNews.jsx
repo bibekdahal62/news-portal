@@ -1,25 +1,28 @@
 import { useNews } from "../context/NewsContext";
+import { useLang } from "../context/LanguageContext";
+import { localizeNews } from "../utils/localize";
 import { Link } from "react-router-dom";
 
 function Trending() {
   const { getTrendingNews } = useNews();
+  const { lang, t } = useLang();
 
-  const trendingItems = getTrendingNews(5);
+  const trendingItems = getTrendingNews(5).map((item) =>
+    localizeNews(item, lang),
+  );
 
   return (
     <aside className="xl:sticky top-0 self-start w-full z-50">
       <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden w-full">
-        {/* Header */}
         <div className="px-4 pt-4 pb-2">
           <h2 className="flex items-center gap-2 text-blue-800 font-bold text-lg">
             <span>📈</span>
-            <span>ट्रेन्डिङमा</span>
+            <span>{t.trending}</span>
           </h2>
 
           <div className="mt-2 border-t-2 border-red-500 w-full" />
         </div>
 
-        {/* List */}
         <ul className="divide-y divide-gray-100">
           {trendingItems.map((item, index) => (
             <li key={item.id} className="px-4 py-3">

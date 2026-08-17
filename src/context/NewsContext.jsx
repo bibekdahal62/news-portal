@@ -33,6 +33,9 @@ export function NewsProvider({ children }) {
       tags: [],
       content: "",
       author: "",
+      headline_en: "",
+      description_en: "",
+      content_en: "",
       views: 0,
       isBreaking: false,
       isFeatured: false,
@@ -109,6 +112,8 @@ export function NewsProvider({ children }) {
     return [...withinWindow, ...backfill].slice(0, limit);
   }
 
+  // Matches against both the Nepali and English fields so a search works
+  // no matter which language the article text was found/typed in.
   function searchNews(query) {
     const q = query.trim().toLowerCase();
     if (!q) return [];
@@ -116,8 +121,11 @@ export function NewsProvider({ children }) {
     return publishedNews.filter((n) => {
       const haystack = [
         n.headline,
+        n.headline_en,
         n.description,
+        n.description_en,
         n.content,
+        n.content_en,
         n.category,
         n.author,
         ...(n.tags || []),

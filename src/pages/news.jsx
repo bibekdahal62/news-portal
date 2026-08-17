@@ -2,10 +2,12 @@ import NewsContainer from "../components/NewsContainer";
 import Trending from "../components/TrendingNews";
 import Banner from "../components/Banner";
 import { useNews } from "../context/NewsContext";
+import { useLang } from "../context/LanguageContext";
 import AdBanner from "../components/AdBanner";
 
-function NewsPage({ category }) {
+function NewsPage({ category, categoryKey }) {
   const { news, getNewsByCategory } = useNews();
+  const { t } = useLang();
 
   if (!category)
     return (
@@ -15,6 +17,7 @@ function NewsPage({ category }) {
     );
 
   const displayNews = getNewsByCategory(category);
+  const heading = categoryKey && t[categoryKey] ? t[categoryKey] : category;
 
   return (
     <main className="mx-6">
@@ -26,7 +29,7 @@ function NewsPage({ category }) {
           <div>
             <div className="shadow-lg rounded-lg border border-gray-50">
               <div className="px-10 pt-6">
-                <h3 className="text-3xl font-bold">{category}</h3>
+                <h3 className="text-3xl font-bold">{heading}</h3>
               </div>
               <NewsContainer newsData={displayNews} />
             </div>

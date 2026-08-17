@@ -1,16 +1,15 @@
-// import { useState, useEffect } from "react";
-
 import NewsContainer from "../components/NewsContainer";
-// import NewsCard from "../components/NewsCard";
 import Trending from "../components/TrendingNews";
 import Banner from "../components/Banner";
 import PinnedNews from "../components/PinnedNews";
 import LatestNews from "../components/LatestNews";
 import AdBanner from "../components/AdBanner";
 import { useNews } from "../context/NewsContext";
+import { useLang } from "../context/LanguageContext";
 
 function HomePage() {
   const { publishedNews, loading, error } = useNews();
+  const { t } = useLang();
 
   const featuredNews = publishedNews.filter((n) => n.isFeatured);
 
@@ -45,7 +44,7 @@ function HomePage() {
                 <div className="shadow-lg rounded-lg border border-gray-50">
                   <div className="px-10 py-6">
                     <h3 className="text-3xl font-bold text-center">
-                      ताजा समाचार
+                      {t.featuredNews}
                     </h3>
                   </div>
                   <NewsContainer newsData={featuredNews} limit={8} />
