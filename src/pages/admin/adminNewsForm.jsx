@@ -23,7 +23,25 @@ const EMPTY_FORM = {
   image: "",
   headline: "",
   description: "",
+  content: "",
+  author: "",
+  tagsInput: "",
+  isBreaking: false,
+  isFeatured: false,
+  published: true,
 };
+
+// news items store tags as an array; the form edits them as one
+// comma-separated string for simplicity.
+function tagsToInput(tags) {
+  return Array.isArray(tags) ? tags.join(", ") : "";
+}
+function inputToTags(input) {
+  return input
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
 
 function AdminNewsForm() {
   const { id } = useParams();
@@ -33,7 +51,14 @@ function AdminNewsForm() {
 
   const existing = isEdit ? getNewsById(id) : null;
   const [form, setForm] = useState(
-    existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM,
+    existing
+      ? {
+          ...EMPTY_FORM,
+          ...existing,
+          tagsInput: tagsToInput(existing.tags),
+          published: existing.published !== false,
+        }
+      : EMPTY_FORM,
   );
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -50,6 +75,10 @@ function AdminNewsForm() {
 
   function handleChange(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+  }
+
+  function handleCheckbox(field) {
+    return (e) => setForm((f) => ({ ...f, [field]: e.target.checked }));
   }
 
   async function handleImageChange(e) {
@@ -72,16 +101,20 @@ function AdminNewsForm() {
     if (
       !form.headline.trim() ||
       !form.image.trim() ||
-      !form.description.trim()
+      !form.description.trim() ||
+      !form.content.trim()
     ) {
       setErrorMsg("कृपया सबै आवश्यक फिल्डहरू भर्नुहोस्।");
       return;
     }
 
+    const { tagsInput, ...rest } = form;
+    const payload = { ...rest, tags: inputToTags(tagsInput) };
+
     if (isEdit) {
-      updateNews(existing.id, form);
+      updateNews(existing.id, payload);
     } else {
-      addNews(form);
+      addNews(payload);
     }
     navigate("/admin/news");
   }
@@ -153,14 +186,84 @@ function AdminNewsForm() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            विवरण
+            लेखक
+          </label>
+          <input
+            type="text"
+            value={form.author}
+            onChange={handleChange("author")}
+            placeholder="जस्तै: रमेश श्रेष्ठ"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            छोटो विवरण (कार्ड/सूचीमा देखिने)
           </label>
           <textarea
             value={form.description}
             onChange={handleChange("description")}
-            rows={5}
+            rows={2}
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            पूर्ण समाचार (विस्तृत पृष्ठमा देखिने)
+          </label>
+          <textarea
+            value={form.content}
+            onChange={handleChange("content")}
+            rows={8}
+            placeholder="अनुच्छेदहरू बीच खाली लाइन छोड्नुहोस्"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            ट्यागहरू (अल्पविरामले छुट्याउनुहोस्)
+          </label>
+          <input
+            type="text"
+            value={form.tagsInput}
+            onChange={handleChange("tagsInput")}
+            placeholder="जस्तै: राजनीति, संसद, बजेट"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-6">
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={form.published}
+              onChange={handleCheckbox("published")}
+              className="rounded border-gray-300 text-(--primary-color) focus:ring-(--primary-color)"
+            />
+            प्रकाशित गर्नुहोस् (अनचेक गरे ड्राफ्टमा रहन्छ, सार्वजनिक पृष्ठमा
+            देखिँदैन)
+          </label>
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={form.isBreaking}
+              onChange={handleCheckbox("isBreaking")}
+              className="rounded border-gray-300 text-(--primary-color) focus:ring-(--primary-color)"
+            />
+            ब्रेकिङ न्युज
+          </label>
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={form.isFeatured}
+              onChange={handleCheckbox("isFeatured")}
+              className="rounded border-gray-300 text-(--primary-color) focus:ring-(--primary-color)"
+            />
+            फिचर गर्नुहोस्
+          </label>
         </div>
 
         <div className="flex gap-3 pt-2">
@@ -168,7 +271,11 @@ function AdminNewsForm() {
             type="submit"
             className="px-5 py-2.5 rounded-md bg-(--primary-color) text-white text-sm font-medium hover:opacity-90 cursor-pointer"
           >
-            {isEdit ? "अपडेट गर्नुहोस्" : "प्रकाशित गर्नुहोस्"}
+            {isEdit
+              ? "अपडेट गर्नुहोस्"
+              : form.published
+                ? "प्रकाशित गर्नुहोस्"
+                : "ड्राफ्ट सुरक्षित गर्नुहोस्"}
           </button>
           <Link
             to="/admin/news"

@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
-import { MdEdit, MdDeleteOutline } from "react-icons/md";
+import {
+  MdEdit,
+  MdDeleteOutline,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
 
 function AdminNewsList() {
-  const { news, deleteNews } = useNews();
+  const { news, deleteNews, togglePublish } = useNews();
   const [query, setQuery] = useState("");
   const [confirmId, setConfirmId] = useState(null);
 
@@ -43,59 +48,106 @@ function AdminNewsList() {
       />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
-        <table className="w-full min-w-140 text-sm">
+        <table className="w-full min-w-160 text-sm">
           <thead className="bg-gray-50 text-gray-500 text-left">
             <tr>
               <th className="px-4 py-3 font-medium">समाचार</th>
               <th className="px-4 py-3 font-medium">श्रेणी</th>
-              <th className="px-4 py-3 font-medium w-32 text-right">कार्य</th>
+              <th className="px-4 py-3 font-medium">लेखक</th>
+              <th className="px-4 py-3 font-medium">हेराइ</th>
+              <th className="px-4 py-3 font-medium">स्थिति</th>
+              <th className="px-4 py-3 font-medium w-40 text-right">कार्य</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {filtered.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={item.image}
-                      alt={item.headline}
-                      className="w-14 h-10 object-cover rounded shrink-0"
-                    />
-                    <span className="line-clamp-2 text-gray-900 max-w-55 sm:max-w-none">
-                      {item.headline}
+            {filtered.map((item) => {
+              const isPublished = item.published !== false;
+              return (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={item.image}
+                        alt={item.headline}
+                        className="w-14 h-10 object-cover rounded shrink-0"
+                      />
+                      <span className="line-clamp-2 text-gray-900 max-w-55 sm:max-w-none">
+                        {item.headline}
+                        {item.isBreaking && (
+                          <span className="ml-2 inline-block bg-yellow-400 text-gray-900 text-[10px] font-bold px-1.5 py-0.5 rounded align-middle">
+                            ब्रेकिङ
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                      {item.category}
                     </span>
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    {item.category}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-2">
-                    <Link
-                      to={`/admin/news/${item.id}/edit`}
-                      className="p-2 rounded hover:bg-gray-100 text-gray-600"
-                      title="सम्पादन"
-                    >
-                      <MdEdit size={18} />
-                    </Link>
-                    <button
-                      onClick={() => setConfirmId(item.id)}
-                      className="p-2 rounded hover:bg-red-50 text-red-600 cursor-pointer"
-                      title="मेटाउनुहोस्"
-                    >
-                      <MdDeleteOutline size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {item.author || "—"}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {typeof item.views === "number" ? item.views : "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {isPublished ? (
+                      <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-1 rounded">
+                        प्रकाशित
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 border border-gray-200 px-2 py-1 rounded">
+                        ड्राफ्ट
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => togglePublish(item.id)}
+                        className={
+                          isPublished
+                            ? "p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
+                            : "p-2 rounded hover:bg-green-50 text-green-600 cursor-pointer"
+                        }
+                        title={
+                          isPublished
+                            ? "अप्रकाशित गर्नुहोस्"
+                            : "प्रकाशित गर्नुहोस्"
+                        }
+                      >
+                        {isPublished ? (
+                          <MdVisibilityOff size={18} />
+                        ) : (
+                          <MdVisibility size={18} />
+                        )}
+                      </button>
+                      <Link
+                        to={`/admin/news/${item.id}/edit`}
+                        className="p-2 rounded hover:bg-gray-100 text-gray-600"
+                        title="सम्पादन"
+                      >
+                        <MdEdit size={18} />
+                      </Link>
+                      <button
+                        onClick={() => setConfirmId(item.id)}
+                        className="p-2 rounded hover:bg-red-50 text-red-600 cursor-pointer"
+                        title="मेटाउनुहोस्"
+                      >
+                        <MdDeleteOutline size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
 
             {filtered.length === 0 && (
               <tr>
                 <td
-                  colSpan={3}
+                  colSpan={6}
                   className="px-4 py-10 text-center text-gray-400"
                 >
                   कुनै समाचार फेला परेन।

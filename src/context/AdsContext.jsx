@@ -9,7 +9,14 @@ export function AdsProvider({ children }) {
 
   function addAd(ad) {
     const id = ads.length ? Math.max(...ads.map((a) => a.id)) + 1 : 1;
-    const item = { id, active: true, createdAt: new Date().toISOString(), ...ad };
+    const item = {
+      id,
+      active: true,
+      showOnHome: true,
+      showOnNews: true,
+      createdAt: new Date().toISOString(),
+      ...ad,
+    };
     setAds((prev) => [item, ...prev]);
     return item;
   }

@@ -1,8 +1,7 @@
-// The original seed data stores "time" as a hand-typed string like
-// "१ घण्टा अगाडि". That obviously can't work for news created through
-// the admin panel, so new/edited items store a real ISO `createdAt`
-// timestamp instead, and this function turns it into the same style
-// of relative label at render time.
+// News items now carry a real ISO timestamp (`publishedAt`, set on the seed
+// data and on every admin create/update) instead of a hand-typed string like
+// "१ घण्टा अगाडि". This converts that timestamp into the same style of
+// relative Nepali label at render time.
 
 const NEPALI_DIGITS = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
 
@@ -30,10 +29,34 @@ export function relativeTimeNe(isoString) {
   return `${toNepaliDigits(years)} वर्ष अगाडि`;
 }
 
-// Returns the display string for a news item: prefer a computed
-// relative time when we have a real timestamp, otherwise fall back to
-// whatever static "time" string came from the seed JSON.
+// Returns the relative-time display string for a news item. Prefers the
+// real `publishedAt` timestamp (present on every item now, seed or
+// admin-created); falls back to the legacy `createdAt`/`time` fields only
+// for any leftover/older records that might not have been migrated.
 export function displayTime(newsItem) {
+  if (newsItem.publishedAt) return relativeTimeNe(newsItem.publishedAt);
   if (newsItem.createdAt) return relativeTimeNe(newsItem.createdAt);
   return newsItem.time || "";
+}
+
+// Full, readable absolute date+time for the article detail page, e.g.
+// "2026-08-16, बिहान ९:००". Falls back gracefully if no timestamp exists.
+export function fullDateTimeNe(newsItem) {
+  const iso = newsItem.publishedAt || newsItem.createdAt;
+  if (!iso) return "";
+  const d = new Date(iso);
+  const datePart = d.toLocaleDateString("en-CA"); // YYYY-MM-DD
+  const timePart = toNepaliDigits(
+    d.toLocaleTimeString("ne-NP", { hour: "2-digit", minute: "2-digit" }),
+  );
+  return `${datePart}, ${timePart}`;
+}
+
+// Compact, localized view count, e.g. 12400 -> "१२.४ हजार".
+export function formatViewsNe(views) {
+  if (!views && views !== 0) return "";
+  if (views < 1000) return toNepaliDigits(views);
+  if (views < 100000)
+    return `${toNepaliDigits((views / 1000).toFixed(1))} हजार`;
+  return `${toNepaliDigits((views / 100000).toFixed(1))} लाख`;
 }

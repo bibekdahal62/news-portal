@@ -2,11 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const NewsContext = createContext();
 
-// All news data lives in React state only for this session. It is seeded
-// once from /news-data.json on load; admin create/update/delete work
-// immediately, but nothing is written to localStorage or any backend, so
-// a page refresh resets everything back to the seed data. See the chat
-// reply for what a real persistence layer would need.
 export function NewsProvider({ children }) {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,13 +22,24 @@ export function NewsProvider({ children }) {
     })();
   }, []);
 
+  // `news` (raw, everything) is for the admin panel, which needs to see
+  // and manage drafts/unpublished items too. `publishedNews` is what every
+  // public-facing page/component should read from instead.
+  const publishedNews = news.filter((n) => n.published !== false);
+
   function addNews(newsItem) {
     const id = news.length ? Math.max(...news.map((n) => n.id)) + 1 : 1;
     const item = {
-      id,
-      href: `/news/${id}`,
-      createdAt: new Date().toISOString(),
+      tags: [],
+      content: "",
+      author: "",
+      views: 0,
+      isBreaking: false,
+      isFeatured: false,
+      published: true,
       ...newsItem,
+      id,
+      publishedAt: new Date().toISOString(),
     };
     setNews((prev) => [item, ...prev]);
     return item;
@@ -53,25 +59,70 @@ export function NewsProvider({ children }) {
     setNews((prev) => prev.filter((n) => n.id !== id));
   }
 
+  // Flips published <-> unpublished for one item.
+  function togglePublish(id) {
+    setNews((prev) =>
+      prev.map((n) =>
+        n.id === id
+          ? {
+              ...n,
+              published: !(n.published !== false),
+              updatedAt: new Date().toISOString(),
+            }
+          : n,
+      ),
+    );
+  }
+
+  // Looks up by id across ALL news (published or not) - the admin edit
+  // form needs this to load drafts too. Public pages that use this
+  // (newsDetail) are responsible for checking `.published` themselves so
+  // an unpublished article's direct URL doesn't leak its content.
   function getNewsById(id) {
     return news.find((n) => String(n.id) === String(id));
   }
 
+  // Public-facing: only published items, for category listing pages.
   function getNewsByCategory(category) {
-    return news.filter((n) => n.category === category);
+    return publishedNews.filter((n) => n.category === category);
+  }
+
+  function getTrendingNews(limit = 5, windowHours = 72) {
+    const cutoff = Date.now() - windowHours * 60 * 60 * 1000;
+    const byViewsDesc = (a, b) => (b.views || 0) - (a.views || 0);
+
+    const withinWindow = publishedNews
+      .filter(
+        (n) => n.publishedAt && new Date(n.publishedAt).getTime() >= cutoff,
+      )
+      .sort(byViewsDesc);
+
+    if (withinWindow.length >= limit) {
+      return withinWindow.slice(0, limit);
+    }
+
+    const usedIds = new Set(withinWindow.map((n) => n.id));
+    const backfill = [...publishedNews]
+      .sort(byViewsDesc)
+      .filter((n) => !usedIds.has(n.id));
+
+    return [...withinWindow, ...backfill].slice(0, limit);
   }
 
   return (
     <NewsContext.Provider
       value={{
         news,
+        publishedNews,
         loading,
         error,
         addNews,
         updateNews,
         deleteNews,
+        togglePublish,
         getNewsById,
         getNewsByCategory,
+        getTrendingNews,
       }}
     >
       {children}

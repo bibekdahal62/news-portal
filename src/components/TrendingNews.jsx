@@ -2,9 +2,9 @@ import { useNews } from "../context/NewsContext";
 import { Link } from "react-router-dom";
 
 function Trending() {
-  const { getNewsByCategory } = useNews();
+  const { getTrendingNews } = useNews();
 
-  const trendingItems = getNewsByCategory("रोचक");
+  const trendingItems = getTrendingNews(5);
 
   return (
     <aside className="xl:sticky top-0 self-start w-full z-50">
@@ -21,26 +21,22 @@ function Trending() {
 
         {/* List */}
         <ul className="divide-y divide-gray-100">
-          {trendingItems.map((item, index) =>
-            index <= 4 ? (
-              <li key={item.id} className="px-4 py-3">
-                <Link
-                  to={`/news/${item.id}`}
-                  className="flex items-start gap-3 group"
-                >
-                  <span className="text-red-600 font-bold text-sm w-4 shrink-0">
-                    {index + 1}
-                  </span>
+          {trendingItems.map((item, index) => (
+            <li key={item.id} className="px-4 py-3">
+              <Link
+                to={`/news/${item.id}`}
+                className="flex items-start gap-3 group"
+              >
+                <span className="text-red-600 font-bold text-sm w-4 shrink-0">
+                  {index + 1}
+                </span>
 
-                  <span className="text-sm text-gray-800 leading-snug group-hover:text-blue-700 transition-colors">
-                    {item.headline}
-                  </span>
-                </Link>
-              </li>
-            ) : (
-              ""
-            ),
-          )}
+                <span className="text-sm text-gray-800 leading-snug group-hover:text-blue-700 transition-colors">
+                  {item.headline}
+                </span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </aside>

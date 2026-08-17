@@ -20,7 +20,7 @@ function NewsPage({ category }) {
     <main className="mx-6">
       <section>
         <div className="container mx-auto mt-12">
-          <AdBanner slot="home-top" />
+          <AdBanner slot="home-top" page="news" />
         </div>
         <div className="container mx-auto mt-10 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
           <div>
@@ -31,11 +31,11 @@ function NewsPage({ category }) {
               <NewsContainer newsData={displayNews} />
             </div>
             <div className="container mx-auto mt-10">
-              <AdBanner slot="home-bottom" />
+              <AdBanner slot="home-bottom" page="news" />
             </div>
           </div>
           <div>
-            <AdBanner slot="home-side" />
+            <AdBanner slot="home-side" page="news" />
           </div>
         </div>
       </section>

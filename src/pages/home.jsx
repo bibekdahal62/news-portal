@@ -9,7 +9,9 @@ import AdBanner from "../components/AdBanner";
 import { useNews } from "../context/NewsContext";
 
 function HomePage() {
-  const { news, loading, error } = useNews();
+  const { publishedNews, loading, error } = useNews();
+
+  const featuredNews = publishedNews.filter((n) => n.isFeatured);
 
   return (
     <main className="min-h-screen mt-12 mx-6">
@@ -24,10 +26,10 @@ function HomePage() {
           )}
 
           <div className="container mx-auto mb-10">
-            <AdBanner slot="home-top" />
+            <AdBanner slot="home-top" page="home" />
           </div>
 
-          {!loading && !error && <PinnedNews news={news} />}
+          {!loading && !error && <PinnedNews news={publishedNews} />}
         </div>
 
         <div className="container mx-auto mt-4 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
@@ -38,10 +40,10 @@ function HomePage() {
                   <div className="px-10 pt-6">
                     <h3 className="text-3xl font-bold">ताजा समाचार</h3>
                   </div>
-                  <NewsContainer newsData={news} limit={8} />
+                  <NewsContainer newsData={featuredNews} limit={8} />
                 </div>
                 <div className="container mx-auto mt-10">
-                  <AdBanner slot="home-bottom" />
+                  <AdBanner slot="home-bottom" page="home" />
                 </div>
               </div>
             )}
@@ -50,7 +52,7 @@ function HomePage() {
             <Trending />
             <div>
               <div className="mt-6">
-                <AdBanner slot="home-side" />
+                <AdBanner slot="home-side" page="home" />
               </div>
             </div>
           </div>

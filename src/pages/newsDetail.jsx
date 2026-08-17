@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useNews } from "../context/NewsContext";
-import { displayTime } from "../utils/time";
+import { displayTime, fullDateTimeNe, formatViewsNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
 
@@ -12,7 +12,7 @@ function NewsDetail() {
 
   const article = getNewsById(id);
 
-  if (!article) {
+  if (!article || article.published === false) {
     return (
       <main className="min-h-screen container mx-auto mt-10 px-4 text-center">
         <h1 className="text-2xl font-bold mb-4">समाचार फेला परेन</h1>
@@ -22,6 +22,10 @@ function NewsDetail() {
       </main>
     );
   }
+
+  // Older/admin-added items may not have a separate long-form `content`
+  // yet; fall back to the short description so the page never renders blank.
+  const body = article.content?.trim() ? article.content : article.description;
 
   return (
     <main className="min-h-screen mx-6">
@@ -33,17 +37,49 @@ function NewsDetail() {
             className="w-full max-h-105 object-cover mt-4 rounded-lg mb-6"
           />
 
-          <span className="inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded mb-3">
-            {article.category}
-          </span>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+              {article.category}
+            </span>
+            {article.isBreaking && (
+              <span className="inline-block bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-1 rounded">
+                ब्रेकिङ
+              </span>
+            )}
+          </div>
+
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             {article.headline}
           </h1>
-          <p className="text-sm text-gray-400 mb-6">{displayTime(article)}</p>
 
-          <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-10">
-            {article.description}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-400 mb-6">
+            {article.author && (
+              <span className="text-gray-600 font-medium">
+                {article.author}
+              </span>
+            )}
+            <span title={fullDateTimeNe(article)}>{displayTime(article)}</span>
+            {typeof article.views === "number" && article.views > 0 && (
+              <span>{formatViewsNe(article.views)} पटक हेरिएको</span>
+            )}
+          </div>
+
+          <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-6">
+            {body}
           </p>
+
+          {Array.isArray(article.tags) && article.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-10">
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           <Link to="/" className="text-(--primary-color) underline">
             ← गृहपृष्ठमा फर्कनुहोस्

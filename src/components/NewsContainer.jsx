@@ -12,12 +12,16 @@ function NewsContainer({ newsData, limit }) {
         {displayedNews.map((news, index) => (
           <NewsCard
             key={news.id}
+            id={news.id}
             category={news.category}
             image={news.image}
             headline={news.headline}
             description={news.description}
             time={displayTime(news)}
             href={news.href}
+            author={news.author}
+            views={news.views}
+            isBreaking={news.isBreaking}
           />
         ))}
       </div>

@@ -9,6 +9,8 @@ const EMPTY_FORM = {
   link: "",
   alt: "",
   active: true,
+  showOnHome: true,
+  showOnNews: true,
 };
 
 function AdminAdForm() {
@@ -155,8 +157,27 @@ function AdminAdForm() {
             checked={form.active}
             onChange={handleChange("active")}
           />
-          सक्रिय (होमपेजमा देखाउने)
+          सक्रिय
         </label>
+
+        <div className="flex flex-wrap gap-6">
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.showOnHome}
+              onChange={handleChange("showOnHome")}
+            />
+            गृहपृष्ठमा देखाउने (Home page)
+          </label>
+          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.showOnNews}
+              onChange={handleChange("showOnNews")}
+            />
+            समाचार पृष्ठमा देखाउने (News page)
+          </label>
+        </div>
 
         <div className="flex gap-3 pt-2">
           <button

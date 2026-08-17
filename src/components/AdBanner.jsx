@@ -1,11 +1,19 @@
 import { useAds } from "../context/AdsContext";
 
-// Renders every active ad assigned to `slot`. Currently only "home-top" is
-// used (top of the homepage news grid), but any new placement just needs a
-// new slot value in the admin form and a matching <AdBanner slot="..." />.
-function AdBanner({ slot }) {
+// Renders every active ad assigned to `slot`, optionally further filtered
+// by which page it's allowed to appear on (`page="home"` or `page="news"`),
+// matching the ad's showOnHome/showOnNews checkboxes set in the admin
+// panel. If `page` is omitted, only slot + active are checked (used by
+// pages like videos that aren't part of the home/news targeting feature).
+function AdBanner({ slot, page }) {
   const { ads } = useAds();
-  const slotAds = ads.filter((a) => a.slot === slot && a.active);
+
+  const slotAds = ads.filter((a) => {
+    if (a.slot !== slot || !a.active) return false;
+    if (page === "home") return a.showOnHome !== false;
+    if (page === "news") return a.showOnNews !== false;
+    return true;
+  });
 
   if (slotAds.length === 0) return null;
 

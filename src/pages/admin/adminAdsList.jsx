@@ -13,7 +13,9 @@ function AdminAdsList() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">विज्ञापन व्यवस्थापन</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            विज्ञापन व्यवस्थापन
+          </h1>
           <p className="text-gray-500">जम्मा {ads.length} विज्ञापन</p>
         </div>
         <Link
@@ -30,7 +32,11 @@ function AdminAdsList() {
             key={ad.id}
             className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col"
           >
-            <img src={ad.image} alt={ad.alt || "ad"} className="w-full h-32 object-cover" />
+            <img
+              src={ad.image}
+              alt={ad.alt || "ad"}
+              className="w-full h-32 object-cover"
+            />
             <div className="p-4 flex-1 flex flex-col">
               <p className="text-xs text-gray-400 mb-1">
                 {SLOT_LABELS[ad.slot] || ad.slot}
@@ -39,14 +45,39 @@ function AdminAdsList() {
                 {ad.alt || "(कुनै विवरण छैन)"}
               </p>
 
-              <label className="flex items-center gap-2 text-sm text-gray-600 mb-3 cursor-pointer">
+              <label className="flex items-center gap-2 text-sm text-gray-600 mb-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={ad.active}
-                  onChange={(e) => updateAd(ad.id, { active: e.target.checked })}
+                  onChange={(e) =>
+                    updateAd(ad.id, { active: e.target.checked })
+                  }
                 />
                 सक्रिय
               </label>
+
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3">
+                <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={ad.showOnHome !== false}
+                    onChange={(e) =>
+                      updateAd(ad.id, { showOnHome: e.target.checked })
+                    }
+                  />
+                  गृहपृष्ठ
+                </label>
+                <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={ad.showOnNews !== false}
+                    onChange={(e) =>
+                      updateAd(ad.id, { showOnNews: e.target.checked })
+                    }
+                  />
+                  समाचार पृष्ठ
+                </label>
+              </div>
 
               <div className="flex items-center justify-end gap-2 mt-auto">
                 <Link

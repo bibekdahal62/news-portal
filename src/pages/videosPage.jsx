@@ -56,7 +56,7 @@ function VideosPage() {
         </section>
 
         <aside>
-          <AdBanner slot="home-side" />
+          <AdBanner slot="home-side" page={"news"} />
         </aside>
       </section>
     </main>

@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route, Outlet } from "react-router-dom";
 
 import HomePage from "./pages/home";
@@ -40,61 +41,73 @@ function PublicLayout() {
 
 function App() {
   return (
-    <Routes>
-      <Route element={<PublicLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/news" element={<NewsPage category={"समाचार"} />} />
-        <Route path="/news/economy" element={<NewsPage category={"अर्थ"} />} />
-        <Route
-          path="/news/politics"
-          element={<NewsPage category={"राजनीति"} />}
-        />
-        <Route path="/news/local" element={<NewsPage category={"स्थानिय"} />} />
-        <Route path="/news/sports" element={<NewsPage category={"खेलकुद"} />} />
-        <Route
-          path="/news/entertainment"
-          element={<NewsPage category={"मनोरञ्जन"} />}
-        />
-        <Route
-          path="/news/international"
-          element={<NewsPage category={"अन्तर्राष्ट्रिय"} />}
-        />
-        {/* Specific /news/* segments above are matched first by React
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/news" element={<NewsPage category={"समाचार"} />} />
+          <Route
+            path="/news/economy"
+            element={<NewsPage category={"अर्थ"} />}
+          />
+          <Route
+            path="/news/politics"
+            element={<NewsPage category={"राजनीति"} />}
+          />
+          <Route
+            path="/news/local"
+            element={<NewsPage category={"स्थानिय"} />}
+          />
+          <Route
+            path="/news/sports"
+            element={<NewsPage category={"खेलकुद"} />}
+          />
+          <Route
+            path="/news/entertainment"
+            element={<NewsPage category={"मनोरञ्जन"} />}
+          />
+          <Route
+            path="/news/international"
+            element={<NewsPage category={"अन्तर्राष्ट्रिय"} />}
+          />
+          {/* Specific /news/* segments above are matched first by React
             Router; this dynamic one only catches numeric-style ids like
             /news/1, which previously had no matching route at all. */}
-        <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
 
-        <Route path="/videos" element={<VideosPage />} />
-        <Route path="/videos/:id" element={<VideoDetail />} />
+          <Route path="/videos" element={<VideosPage />} />
+          <Route path="/videos/:id" element={<VideoDetail />} />
 
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-      </Route>
-
-      <Route path="/admin/login" element={<AdminLogin />} />
-
-      <Route element={<ProtectedRoute />}>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-
-          <Route path="news" element={<AdminNewsList />} />
-          <Route path="news/new" element={<AdminNewsForm />} />
-          <Route path="news/:id/edit" element={<AdminNewsForm />} />
-
-          <Route path="ads" element={<AdminAdsList />} />
-          <Route path="ads/new" element={<AdminAdForm />} />
-          <Route path="ads/:id/edit" element={<AdminAdForm />} />
-
-          <Route path="videos" element={<AdminVideosList />} />
-          <Route path="videos/new" element={<AdminVideoForm />} />
-          <Route path="videos/:id/edit" element={<AdminVideoForm />} />
-          <Route path="contact-messages" element={<AdminContactMessage />} />
-          <Route path="privacy" element={<AdminPrivacy />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Route>
-      </Route>
-    </Routes>
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+
+            <Route path="news" element={<AdminNewsList />} />
+            <Route path="news/new" element={<AdminNewsForm />} />
+            <Route path="news/:id/edit" element={<AdminNewsForm />} />
+
+            <Route path="ads" element={<AdminAdsList />} />
+            <Route path="ads/new" element={<AdminAdForm />} />
+            <Route path="ads/:id/edit" element={<AdminAdForm />} />
+
+            <Route path="videos" element={<AdminVideosList />} />
+            <Route path="videos/new" element={<AdminVideoForm />} />
+            <Route path="videos/:id/edit" element={<AdminVideoForm />} />
+            <Route path="contact-messages" element={<AdminContactMessage />} />
+            <Route path="privacy" element={<AdminPrivacy />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }
 

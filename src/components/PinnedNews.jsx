@@ -1,28 +1,29 @@
 import NewsCard from "./NewsCard";
 import { displayTime } from "../utils/time";
 
-function PinnedNews({ news }) {
-  const rochakNews = news.filter((n) => n.category === "रोचक");
+const MAX_PINNED = 6;
 
-  // console.log(rochakNews);
+function PinnedNews({ news }) {
+  const breakingNews = news.filter((n) => n.isBreaking).slice(0, MAX_PINNED);
+
+  if (breakingNews.length === 0) return null;
 
   return (
     <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {rochakNews.map((news, index) =>
-        index <= 2 ? (
-          <NewsCard
-            key={news.id}
-            category={news.category}
-            image={news.image}
-            headline={news.headline}
-            description={news.description}
-            time={displayTime(news)}
-            href={news.href}
-          />
-        ) : (
-          ""
-        ),
-      )}
+      {breakingNews.map((news) => (
+        <NewsCard
+          key={news.id}
+          category={news.category}
+          image={news.image}
+          headline={news.headline}
+          description={news.description}
+          time={displayTime(news)}
+          href={news.href}
+          author={news.author}
+          views={news.views}
+          isBreaking={news.isBreaking}
+        />
+      ))}
     </div>
   );
 }
