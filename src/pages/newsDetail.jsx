@@ -1,5 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useNews } from "../context/NewsContext";
+import { useLang } from "../context/LanguageContext";
+import { localizeNews } from "../utils/localize";
 import { displayTime, fullDateTimeNe, formatViewsNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
@@ -7,12 +9,13 @@ import AdBanner from "../components/AdBanner";
 function NewsDetail() {
   const { id } = useParams();
   const { getNewsById, loading } = useNews();
+  const { lang } = useLang();
 
   if (loading) return <p className="text-center mt-10">लोड हुँदैछ...</p>;
 
-  const article = getNewsById(id);
+  const rawArticle = getNewsById(id);
 
-  if (!article || article.published === false) {
+  if (!rawArticle || rawArticle.published === false) {
     return (
       <main className="min-h-screen container mx-auto mt-10 px-4 text-center">
         <h1 className="text-2xl font-bold mb-4">समाचार फेला परेन</h1>
@@ -22,6 +25,8 @@ function NewsDetail() {
       </main>
     );
   }
+
+  const article = localizeNews(rawArticle, lang);
 
   // Older/admin-added items may not have a separate long-form `content`
   // yet; fall back to the short description so the page never renders blank.
@@ -82,7 +87,7 @@ function NewsDetail() {
           )}
 
           <Link to="/" className="text-(--primary-color) underline">
-            ← गृहपृष्ठमा फर्कनुहोस्
+            {lang === "en" ? "← Back to home" : "← गृहपृष्ठमा फर्कनुहोस्"}
           </Link>
         </section>
 

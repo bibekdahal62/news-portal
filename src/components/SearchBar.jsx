@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { useNews } from "../context/NewsContext";
 import { useLang } from "../context/LanguageContext";
+import { localizeNews } from "../utils/localize";
 
 const MAX_SUGGESTIONS = 5;
 
@@ -13,7 +14,7 @@ function SearchBar({ className = "", onNavigate }) {
   const wrapperRef = useRef(null);
 
   const { searchNews } = useNews();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +32,7 @@ function SearchBar({ className = "", onNavigate }) {
     setQuery(value);
 
     if (value.trim()) {
+      // searchNews already matches against both Nepali and English fields.
       setSuggestions(searchNews(value).slice(0, MAX_SUGGESTIONS));
       setIsOpen(true);
     } else {
@@ -90,29 +92,32 @@ function SearchBar({ className = "", onNavigate }) {
           {suggestions.length > 0 ? (
             <>
               <ul className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
-                {suggestions.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      onClick={() => handleSuggestionClick(item.id)}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.headline}
-                        className="w-10 h-10 object-cover rounded shrink-0"
-                      />
-                      <span className="min-w-0">
-                        <span className="block text-sm font-medium text-gray-900 truncate">
-                          {item.headline}
+                {suggestions.map((rawItem) => {
+                  const item = localizeNews(rawItem, lang);
+                  return (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => handleSuggestionClick(item.id)}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 transition-colors"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.headline}
+                          className="w-10 h-10 object-cover rounded shrink-0"
+                        />
+                        <span className="min-w-0">
+                          <span className="block text-sm font-medium text-gray-900 truncate">
+                            {item.headline}
+                          </span>
+                          <span className="block text-xs text-gray-400">
+                            {item.category}
+                          </span>
                         </span>
-                        <span className="block text-xs text-gray-400">
-                          {item.category}
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
               <button
                 type="button"
