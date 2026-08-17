@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
 function AdminLogin() {
@@ -57,10 +57,19 @@ function AdminLogin() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 mb-6 outline-none focus:ring-2 focus:ring-(--primary-color)"
+          className="w-full border border-gray-300 rounded-md px-3 py-2 mb-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           autoComplete="current-password"
           required
         />
+
+        <div className="text-right mb-6">
+          <Link
+            to="/admin/forgot-password"
+            className="text-xs text-(--primary-color) hover:underline"
+          >
+            पासवर्ड बिर्सनुभयो?
+          </Link>
+        </div>
 
         <button
           type="submit"

@@ -9,6 +9,7 @@ import {
   MdMenu,
   MdClose,
   MdPrivacyTip,
+  MdLockReset,
 } from "react-icons/md";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { useNavigate, useLocation, NavLink, Outlet } from "react-router-dom";
@@ -29,8 +30,6 @@ function AdminLayout() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Close the mobile drawer automatically whenever the route changes, so
-  // tapping a nav link doesn't leave the overlay open on top of the page.
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
@@ -84,6 +83,19 @@ function AdminLayout() {
           <MdOutlineOpenInNew size={18} />
           साइट हेर्नुहोस्
         </NavLink>
+        <NavLink
+          to="/admin/change-password"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+              isActive
+                ? "bg-white text-(--primary-color)"
+                : "text-white/85 hover:bg-white/10"
+            }`
+          }
+        >
+          <MdLockReset size={18} />
+          पासवर्ड परिवर्तन
+        </NavLink>
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-white/85 hover:bg-white/10 cursor-pointer"
@@ -97,12 +109,10 @@ function AdminLayout() {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Desktop / tablet sidebar: always visible from the lg breakpoint up */}
       <aside className="hidden lg:flex w-64 shrink-0 bg-(--primary-color) text-white flex-col">
         {sidebarContent}
       </aside>
 
-      {/* Mobile drawer: slides in over the page, only rendered below lg */}
       <div
         className={`lg:hidden fixed inset-0 z-40 transition-opacity ${
           menuOpen
@@ -124,8 +134,6 @@ function AdminLayout() {
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col">
-        {/* Mobile top bar with the menu toggle; hidden on lg where the
-            sidebar is always visible instead. */}
         <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-100 px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => setMenuOpen(true)}

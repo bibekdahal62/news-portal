@@ -109,6 +109,27 @@ export function NewsProvider({ children }) {
     return [...withinWindow, ...backfill].slice(0, limit);
   }
 
+  function searchNews(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+
+    return publishedNews.filter((n) => {
+      const haystack = [
+        n.headline,
+        n.description,
+        n.content,
+        n.category,
+        n.author,
+        ...(n.tags || []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(q);
+    });
+  }
+
   return (
     <NewsContext.Provider
       value={{
@@ -123,6 +144,7 @@ export function NewsProvider({ children }) {
         getNewsById,
         getNewsByCategory,
         getTrendingNews,
+        searchNews,
       }}
     >
       {children}

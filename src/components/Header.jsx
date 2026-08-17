@@ -6,6 +6,8 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useLang } from "../context/LanguageContext";
 import DateDisplay from "./DateDisplay";
 
+import SearchBar from "./SearchBar";
+
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useLang();
@@ -59,7 +61,7 @@ function Header() {
                 {/* Search + Hamburger */}
                 <div className="flex items-center gap-2">
                   {/* Search Bar */}
-                  <div className="relative hidden lg:inline-block">
+                  {/* <div className="relative hidden lg:inline-block">
                     <input
                       type="text"
                       placeholder={t.search}
@@ -70,7 +72,9 @@ function Header() {
                       size={22}
                       className="absolute right-3 top-1/2 -translate-y-1/2"
                     />
-                  </div>
+                  </div> */}
+
+                  <SearchBar className="hidden lg:inline-block w-40 sm:w-52 lg:w-64" />
 
                   {/* Hamburger - Tablet and Mobile Only */}
                   <button
@@ -185,6 +189,10 @@ function Header() {
             {/* Tablet / Mobile Navigation */}
             {isMenuOpen && (
               <nav className="lg:hidden px-4 mb-4 flex flex-col gap-4 font-semibold items-start">
+                <SearchBar
+                  className="w-full"
+                  onNavigate={() => setIsMenuOpen(false)}
+                />
                 <Link
                   to="/"
                   className="text-hover"

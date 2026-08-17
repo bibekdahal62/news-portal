@@ -13,6 +13,8 @@ import VideosPage from "./pages/videosPage";
 import VideoDetail from "./pages/videoDetail";
 import TermsPage from "./pages/terms";
 
+import SearchResultsPage from "./pages/searchResults";
+
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/adminLogin";
@@ -25,6 +27,10 @@ import AdminVideosList from "./pages/admin/adminVideosList";
 import AdminVideoForm from "./pages/admin/adminVideoForm";
 import AdminContactMessage from "./pages/admin/adminContactMessage";
 import AdminPrivacy from "./pages/admin/adminPrivacy";
+
+import AdminForgotPassword from "./pages/admin/adminForgotPassword";
+import AdminResetPassword from "./pages/admin/adminResetPassword";
+import AdminChangePassword from "./pages/admin/adminChangePassword";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -83,13 +89,21 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/forgot-password"
+          element={<AdminForgotPassword />}
+        />
+        <Route path="/admin/reset-password" element={<AdminResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+
+            <Route path="change-password" element={<AdminChangePassword />} />
 
             <Route path="news" element={<AdminNewsList />} />
             <Route path="news/new" element={<AdminNewsForm />} />

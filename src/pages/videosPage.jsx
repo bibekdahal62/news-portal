@@ -28,7 +28,7 @@ function VideosPage() {
               <Link
                 key={video.id}
                 to={`/videos/${video.id}`}
-                className="block bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden no-underline hover:no-underline group hover:shadow-md transition-shadow"
+                className="block bg-white rounded-md shadow-sm border border-gray-50 overflow-hidden no-underline hover:no-underline group hover:shadow-md transition-shadow"
               >
                 <div className="relative">
                   <img

@@ -23,7 +23,7 @@ function VideoDetail() {
   return (
     <main className="mx-6 min-h-screen">
       <section className="container mx-auto mt-12 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
-        <section className="px-4 py-6 lg:px-10 shadow-lg rounded-lg w-full border border-gray-100">
+        <section className="px-4 py-6 lg:px-10 shadow-lg rounded-lg w-full border border-gray-50">
           <div className="aspect-video w-full rounded-lg overflow-hidden shadow-md mb-6">
             <iframe
               className="w-full h-full"

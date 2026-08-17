@@ -2,12 +2,16 @@ import NewsCard from "./NewsCard";
 import { displayTime } from "../utils/time";
 
 function NewsContainer({ newsData, limit }) {
+  const sortedNews = [...newsData].sort(
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt),
+  );
+
   const displayedNews = parseInt(limit)
-    ? newsData.slice(0, parseInt(limit))
-    : newsData;
+    ? sortedNews.slice(0, parseInt(limit))
+    : sortedNews;
 
   return (
-    <section className="p-8">
+    <section className="sm:p-8">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
         {displayedNews.map((news, index) => (
           <NewsCard
