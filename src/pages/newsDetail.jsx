@@ -1,65 +1,70 @@
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
+
 import { useNews } from "../context/NewsContext";
-import {
-  displayTime,
-  fullDateTimeNe,
-  formatViewsNe,
-} from "../utils/time";
+
+import { displayTime, fullDateTimeNe, formatViewsNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
 
-// Font Awesome icons
-import {
-  FaFacebookF,
-  FaWhatsapp,
-  FaShareAlt,
-} from "react-icons/fa";
+// Font Awesome 5
+import { FaFacebookF, FaWhatsapp, FaShareAlt } from "react-icons/fa";
 
+// Font Awesome 6
 import { FaXTwitter } from "react-icons/fa6";
 
 function NewsDetail() {
   const { id } = useParams();
   const { getNewsById, loading } = useNews();
 
-  // Image popup state
+  // ==========================================
+  // IMAGE POPUP STATE
+  // ==========================================
+
   const [showImage, setShowImage] = useState(false);
 
+  // ==========================================
+  // LOADING
+  // ==========================================
+
   if (loading) {
-    return (
-      <p className="text-center mt-10">
-        लोड हुँदैछ...
-      </p>
-    );
+    return <p className="text-center mt-10">लोड हुँदैछ...</p>;
   }
+
+  // ==========================================
+  // GET ARTICLE
+  // ==========================================
 
   const article = getNewsById(id);
 
-  // Article not found
+  // ==========================================
+  // ARTICLE NOT FOUND
+  // ==========================================
+
   if (!article || article.published === false) {
     return (
       <main className="min-h-screen container mx-auto mt-10 px-4 text-center">
-        <h1 className="text-2xl font-bold mb-4">
-          समाचार फेला परेन
-        </h1>
+        <h1 className="text-2xl font-bold mb-4">समाचार फेला परेन</h1>
 
-        <Link
-          to="/"
-          className="text-(--primary-color) underline"
-        >
+        <Link to="/" className="text-(--primary-color) underline">
           गृहपृष्ठमा फर्कनुहोस्
         </Link>
       </main>
     );
   }
 
-  // Use content if available.
-  // Otherwise use description.
-  const body = article.content?.trim()
-    ? article.content
-    : article.description;
+  // ==========================================
+  // ARTICLE BODY
+  // ==========================================
 
-  // Current article URL
+  // If content exists, use content.
+  // Otherwise use description.
+  const body = article.content?.trim() ? article.content : article.description;
+
+  // ==========================================
+  // CURRENT ARTICLE URL
+  // ==========================================
+
   const shareUrl = window.location.href;
 
   // ==========================================
@@ -71,9 +76,10 @@ function NewsDetail() {
 
     const shareText = `${title}\n\n${shareUrl}`;
 
-    // ------------------------------------------
-    // Native Share
-    // ------------------------------------------
+    // ========================================
+    // NATIVE SHARE
+    // ========================================
+
     if (platform === "native") {
       if (navigator.share) {
         try {
@@ -83,11 +89,11 @@ function NewsDetail() {
             url: shareUrl,
           });
         } catch (error) {
-          // User cancelled the share window
+          // User cancelled sharing
           console.log("Share cancelled");
         }
       } else {
-        // Fallback for browsers without Web Share API
+        // Fallback if browser does not support navigator.share
         try {
           await navigator.clipboard.writeText(shareUrl);
 
@@ -100,76 +106,101 @@ function NewsDetail() {
       return;
     }
 
-    // ------------------------------------------
-    // Facebook
-    // ------------------------------------------
+    // ========================================
+    // FACEBOOK SHARE
+    // ========================================
+
     if (platform === "facebook") {
       window.open(
         `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          shareUrl
+          shareUrl,
         )}`,
         "_blank",
-        "width=600,height=500"
+        "width=600,height=500",
       );
 
       return;
     }
 
-    // ------------------------------------------
-    // X / Twitter
-    // ------------------------------------------
+    // ========================================
+    // X / TWITTER SHARE
+    // ========================================
+
     if (platform === "x") {
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          title
+          title,
         )}&url=${encodeURIComponent(shareUrl)}`,
         "_blank",
-        "width=600,height=500"
+        "width=600,height=500",
       );
 
       return;
     }
 
-    // ------------------------------------------
-    // WhatsApp
-    // ------------------------------------------
+    // ========================================
+    // WHATSAPP SHARE
+    // ========================================
+
     if (platform === "whatsapp") {
       window.open(
-        `https://wa.me/?text=${encodeURIComponent(
-          shareText
-        )}`,
-        "_blank"
+        `https://wa.me/?text=${encodeURIComponent(shareText)}`,
+        "_blank",
       );
 
       return;
     }
   };
 
+  // ==========================================
+  // JSX
+  // ==========================================
+
   return (
     <main className="min-h-screen mx-6">
-
       {/* ==========================================
           ARTICLE + SIDE AD
       =========================================== */}
 
-      <section className="container mx-auto mt-12 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
-
+      <section
+        className="
+          container
+          mx-auto
+          mt-12
+          flex
+          flex-col
+          xl:flex-row
+          justify-center
+          xl:gap-10
+          gap-6
+        "
+      >
         {/* ==========================================
-            NEWS ARTICLE
+            NEWS ARTICLE CARD
         =========================================== */}
 
-        <section className="shadow-lg w-full rounded-lg py-6 px-4 lg:px-10 border border-gray-100">
-
+        <section
+          className="
+            shadow-lg
+            w-full
+            rounded-lg
+            py-6
+            px-4
+            lg:px-10
+            border
+            border-gray-100
+          "
+        >
           {/* ==========================================
               NEWS IMAGE
           =========================================== */}
 
           <div className="block mt-4 mb-6">
-
             <img
               src={article.image}
               alt={article.headline}
               onClick={() => setShowImage(true)}
+              title="तस्बिर खोल्नुहोस्"
               className="
                 w-full
                 max-h-[500px]
@@ -180,7 +211,6 @@ function NewsDetail() {
                 transition
               "
             />
-
           </div>
 
           {/* ==========================================
@@ -188,58 +218,111 @@ function NewsDetail() {
           =========================================== */}
 
           <div className="flex items-center gap-2 mb-3">
+            {/* Category */}
 
-            <span className="inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+            <span
+              className="
+                inline-block
+                bg-red-600
+                text-white
+                text-xs
+                font-semibold
+                px-2
+                py-1
+                rounded
+              "
+            >
               {article.category}
             </span>
 
+            {/* Breaking */}
+
             {article.isBreaking && (
-              <span className="inline-block bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-1 rounded">
+              <span
+                className="
+                  inline-block
+                  bg-yellow-400
+                  text-gray-900
+                  text-xs
+                  font-bold
+                  px-2
+                  py-1
+                  rounded
+                "
+              >
                 ब्रेकिङ
               </span>
             )}
-
           </div>
 
           {/* ==========================================
               HEADLINE
           =========================================== */}
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1
+            className="
+              text-3xl
+              font-bold
+              text-gray-900
+              mb-2
+            "
+          >
             {article.headline}
           </h1>
 
           {/* ==========================================
-              AUTHOR / DATE / VIEWS
+              AUTHOR + EXISTING TIME + VIEWS
           =========================================== */}
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-400 mb-6">
+          <div
+            className="
+              flex
+              flex-wrap
+              items-center
+              gap-x-3
+              gap-y-1
+              text-sm
+              text-gray-400
+              mb-6
+            "
+          >
+            {/* Author */}
 
             {article.author && (
-              <span className="text-gray-600 font-medium">
+              <span
+                className="
+                  text-gray-600
+                  font-medium
+                "
+              >
                 {article.author}
               </span>
             )}
 
-            <span title={fullDateTimeNe(article)}>
-              {displayTime(article)}
-            </span>
+            {/* EXISTING TIME */}
 
-            {typeof article.views === "number" &&
-              article.views > 0 && (
-                <span>
-                  {formatViewsNe(article.views)} पटक हेरिएको
-                </span>
-              )}
+            <span title={fullDateTimeNe(article)}>{displayTime(article)}</span>
 
+            {/* EXISTING VIEWS */}
+
+            {typeof article.views === "number" && article.views > 0 && (
+              <span>{formatViewsNe(article.views)} पटक हेरिएको</span>
+            )}
           </div>
 
           {/* ==========================================
-              SHARE SECTION
+              SHARE BUTTONS
           =========================================== */}
 
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-
+          <div
+            className="
+              flex
+              flex-wrap
+              items-center
+              gap-2
+              mb-6
+            "
+          >
             {/* ========================================
                 NATIVE SHARE
             ========================================= */}
@@ -264,18 +347,22 @@ function NewsDetail() {
             >
               <FaShareAlt />
 
-              <span>
-                Share
-              </span>
+              <span>Share</span>
             </button>
-
           </div>
 
           {/* ==========================================
               ARTICLE CONTENT
           =========================================== */}
 
-          <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-6">
+          <p
+            className="
+              text-gray-700
+              leading-relaxed
+              whitespace-pre-line
+              mb-6
+            "
+          >
             {body}
           </p>
 
@@ -283,16 +370,19 @@ function NewsDetail() {
               TAGS
           =========================================== */}
 
-          {Array.isArray(article.tags) &&
-            article.tags.length > 0 && (
-
-              <div className="flex flex-wrap gap-2 mb-10">
-
-                {article.tags.map((tag) => (
-
-                  <span
-                    key={tag}
-                    className="
+          {Array.isArray(article.tags) && article.tags.length > 0 && (
+            <div
+              className="
+                  flex
+                  flex-wrap
+                  gap-2
+                  mb-10
+                "
+            >
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="
                       text-xs
                       bg-gray-100
                       text-gray-600
@@ -300,27 +390,20 @@ function NewsDetail() {
                       py-1
                       rounded
                     "
-                  >
-                    #{tag}
-                  </span>
-
-                ))}
-
-              </div>
-
-            )}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* ==========================================
               BACK TO HOME
           =========================================== */}
 
-          <Link
-            to="/"
-            className="text-(--primary-color) underline"
-          >
+          <Link to="/" className="text-(--primary-color) underline">
             ← गृहपृष्ठमा फर्कनुहोस्
           </Link>
-
         </section>
 
         {/* ==========================================
@@ -330,15 +413,13 @@ function NewsDetail() {
         <aside>
           <AdBanner slot="home-side" />
         </aside>
-
       </section>
 
-      {/* ==========================================
+      {/* ==================================================
           IMAGE LIGHTBOX / POPUP
-      =========================================== */}
+      =================================================== */}
 
       {showImage && (
-
         <div
           className="
             fixed
@@ -352,7 +433,6 @@ function NewsDetail() {
           "
           onClick={() => setShowImage(false)}
         >
-
           {/* ========================================
               CLOSE BUTTON
           ========================================= */}
@@ -360,6 +440,7 @@ function NewsDetail() {
           <button
             type="button"
             onClick={() => setShowImage(false)}
+            aria-label="Close image"
             className="
               absolute
               top-5
@@ -378,7 +459,6 @@ function NewsDetail() {
               transition
               z-[10000]
             "
-            aria-label="Close image"
           >
             ×
           </button>
@@ -399,11 +479,8 @@ function NewsDetail() {
               shadow-2xl
             "
           />
-
         </div>
-
       )}
-
     </main>
   );
 }
