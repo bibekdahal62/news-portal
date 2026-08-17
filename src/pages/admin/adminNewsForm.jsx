@@ -2,21 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { fileToDataUrl } from "../../utils/file";
-
-// Every category currently used across the site: the 7 that have their own
-// nav link/route, plus "रोचक" (used to pick the 3 pinned homepage cards)
-// and "कला साहित्य" which exists in the seed data but has no nav link yet.
-const CATEGORIES = [
-  "समाचार",
-  "अर्थ",
-  "राजनीति",
-  "स्थानिय",
-  "खेलकुद",
-  "मनोरञ्जन",
-  "अन्तर्राष्ट्रिय",
-  "रोचक",
-  "कला साहित्य",
-];
+import { CATEGORIES } from "../../utils/categories";
 
 const EMPTY_FORM = {
   category: CATEGORIES[0],
@@ -24,6 +10,9 @@ const EMPTY_FORM = {
   headline: "",
   description: "",
   content: "",
+  headline_en: "",
+  description_en: "",
+  content_en: "",
   author: "",
   tagsInput: "",
   isBreaking: false,
@@ -61,6 +50,7 @@ function AdminNewsForm() {
       : EMPTY_FORM,
   );
   const [errorMsg, setErrorMsg] = useState("");
+  const [activeTab, setActiveTab] = useState("ne"); // "ne" | "en"
 
   if (isEdit && !existing) {
     return (
@@ -104,7 +94,8 @@ function AdminNewsForm() {
       !form.description.trim() ||
       !form.content.trim()
     ) {
-      setErrorMsg("कृपया सबै आवश्यक फिल्डहरू भर्नुहोस्।");
+      setActiveTab("ne");
+      setErrorMsg("कृपया नेपाली भाषाका सबै आवश्यक फिल्डहरू भर्नुहोस्।");
       return;
     }
 
@@ -118,6 +109,13 @@ function AdminNewsForm() {
     }
     navigate("/admin/news");
   }
+
+  const tabBtnClass = (tab) =>
+    `px-4 py-2 text-sm font-medium border-b-2 -mb-px cursor-pointer ${
+      activeTab === tab
+        ? "border-(--primary-color) text-(--primary-color)"
+        : "border-transparent text-gray-500 hover:text-gray-700"
+    }`;
 
   return (
     <div>
@@ -174,18 +172,6 @@ function AdminNewsForm() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            शीर्षक
-          </label>
-          <input
-            type="text"
-            value={form.headline}
-            onChange={handleChange("headline")}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
             लेखक
           </label>
           <input
@@ -197,29 +183,111 @@ function AdminNewsForm() {
           />
         </div>
 
+        {/* Language tabs: Nepali is required/primary, English is optional. */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            छोटो विवरण (कार्ड/सूचीमा देखिने)
-          </label>
-          <textarea
-            value={form.description}
-            onChange={handleChange("description")}
-            rows={2}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
-        </div>
+          <div className="flex border-b border-gray-200 mb-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab("ne")}
+              className={tabBtnClass("ne")}
+            >
+              नेपाली *
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("en")}
+              className={tabBtnClass("en")}
+            >
+              English
+            </button>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            पूर्ण समाचार (विस्तृत पृष्ठमा देखिने)
-          </label>
-          <textarea
-            value={form.content}
-            onChange={handleChange("content")}
-            rows={8}
-            placeholder="अनुच्छेदहरू बीच खाली लाइन छोड्नुहोस्"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
+          {activeTab === "ne" && (
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  शीर्षक
+                </label>
+                <input
+                  type="text"
+                  value={form.headline}
+                  onChange={handleChange("headline")}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  छोटो विवरण (कार्ड/सूचीमा देखिने)
+                </label>
+                <textarea
+                  value={form.description}
+                  onChange={handleChange("description")}
+                  rows={2}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  पूर्ण समाचार (विस्तृत पृष्ठमा देखिने)
+                </label>
+                <textarea
+                  value={form.content}
+                  onChange={handleChange("content")}
+                  rows={8}
+                  placeholder="अनुच्छेदहरू बीच खाली लाइन छोड्नुहोस्"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "en" && (
+            <div className="flex flex-col gap-4">
+              <p className="text-xs text-gray-400 -mt-1">
+                Optional — if left blank, the site falls back to the Nepali
+                text.
+              </p>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Headline
+                </label>
+                <input
+                  type="text"
+                  value={form.headline_en}
+                  onChange={handleChange("headline_en")}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Short summary (shown on cards/lists)
+                </label>
+                <textarea
+                  value={form.description_en}
+                  onChange={handleChange("description_en")}
+                  rows={2}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full content (shown on detail page)
+                </label>
+                <textarea
+                  value={form.content_en}
+                  onChange={handleChange("content_en")}
+                  rows={8}
+                  placeholder="Leave a blank line between paragraphs"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div>

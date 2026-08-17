@@ -1,69 +1,72 @@
-// Static Terms & Conditions page for Gurukul TV.
-// This page has no admin-editable content — all sections are fixed defaults.
-const TERMS_SECTIONS = [
-  {
-    heading: "सामान्य सर्तहरू",
-    body: "गुरुकुल टिभी मा स्वागत छ। यस वेबसाइट प्रयोग गर्नुअघि कृपया यी सेवा सर्तहरू ध्यानपूर्वक पढ्नुहोस्। यो साइट प्रयोग गर्नु भनेको तपाईंले यी सर्तहरू स्वीकार गर्नुभएको मानिनेछ। यदि तपाईं यी सर्तहरूसँग सहमत हुनुहुन्न भने कृपया यो वेबसाइट प्रयोग नगर्नुहोस्।",
-  },
-  {
-    heading: "सामग्रीको प्रयोग",
-    body: "गुरुकुल टिभी मा प्रकाशित समाचार, तस्बिर, भिडियो र अन्य सामग्री जानकारीमूलक उद्देश्यका लागि मात्र हो। हाम्रो पूर्व लिखित अनुमति बिना कुनै पनि सामग्री व्यावसायिक प्रयोजनका लागि प्रतिलिपि, वितरण वा पुनः प्रकाशन गर्न पाइने छैन। व्यक्तिगत, गैर-व्यावसायिक प्रयोगका लागि सामग्री साझा गर्दा मूल स्रोतको उल्लेख गर्नुपर्नेछ।",
-  },
-  {
-    heading: "बौद्धिक सम्पत्ति अधिकार",
-    body: "यस वेबसाइटमा रहेको लोगो, डिजाइन, समाचार सामग्री, तस्बिर र भिडियोहरूको सम्पूर्ण अधिकार गुरुकुल टिभी मा सुरक्षित छ। अनधिकृत प्रयोग वा प्रतिलिपि कानुनी कारबाहीको भागिदार हुन सक्छ।",
-  },
-  {
-    heading: "प्रयोगकर्ताको आचरण",
-    body: "यस वेबसाइट प्रयोग गर्दा तपाईंले कुनै पनि गैरकानुनी, अपमानजनक, भ्रामक वा आपत्तिजनक सामग्री प्रकाशित वा प्रसारण नगर्ने प्रतिबद्धता जनाउनुहुन्छ। कमेन्ट वा प्रतिक्रिया दिँदा मर्यादित र सभ्य भाषाको प्रयोग गर्नुपर्नेछ। नियम विपरीत भेटिएका प्रतिक्रियाहरू हटाउने अधिकार गुरुकुल टिभी मा सुरक्षित रहनेछ।",
-  },
-  {
-    heading: "बाह्य लिंकहरू",
-    body: "हाम्रो वेबसाइटमा अन्य वेबसाइटहरूका लिंकहरू समावेश हुन सक्छन्। यी बाह्य साइटहरूको सामग्री, गोपनीयता नीति वा अभ्यासका लागि गुरुकुल टिभी जिम्मेवार हुनेछैन। बाह्य लिंकमा जानु अघि सम्बन्धित साइटको आफ्नै नीति जाँच गर्न सिफारिस गरिन्छ।",
-  },
-  {
-    heading: "सामग्रीको शुद्धता",
-    body: "गुरुकुल टिभी ले सही र भरपर्दो समाचार दिने प्रयास गर्छ, तर प्रकाशित सामग्रीमा त्रुटि वा अशुद्धता हुन सक्ने सम्भावनालाई इन्कार गर्न सकिँदैन। कुनै पनि सामग्रीमा भएको त्रुटिका कारण हुन सक्ने प्रत्यक्ष वा अप्रत्यक्ष क्षतिको लागि गुरुकुल टिभी जिम्मेवार हुनेछैन।",
-  },
-  {
-    heading: "दायित्वको सीमा",
-    body: "यस वेबसाइटको प्रयोगबाट उत्पन्न हुन सक्ने कुनै पनि प्रत्यक्ष, अप्रत्यक्ष, आकस्मिक वा परिणामस्वरूप हुने क्षतिको लागि गुरुकुल टिभी र यसका सम्पादक, कर्मचारी वा सहयोगीहरू जिम्मेवार हुने छैनन्।",
-  },
-  {
-    heading: "सर्तमा परिवर्तन",
-    body: "गुरुकुल टिभी ले यी सेवा सर्तहरू आवश्यकता अनुसार परिवर्तन वा अद्यावधिक गर्ने अधिकार सुरक्षित राख्छ। परिवर्तन पश्चात पनि वेबसाइटको निरन्तर प्रयोगले परिमार्जित सर्तहरू स्वीकार गरेको मानिनेछ।",
-  },
-  {
-    heading: "सम्पर्क जानकारी",
-    body: "यी सेवा सर्तहरू सम्बन्धी कुनै प्रश्न वा जिज्ञासा भएमा कृपया हाम्रो सम्पर्क पृष्ठमार्फत हामीलाई सम्पर्क गर्नुहोस्।",
-  },
-];
+import { useEffect, useState } from "react";
+import { useLang } from "../context/LanguageContext";
 
 function TermsPage() {
+  const { t, lang } = useLang();
+
+  const [termsSections, setTermsSections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    fetch(`/locales/terms.${lang}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch terms content");
+        return res.json();
+      })
+      .then((data) => {
+        if (!cancelled) setTermsSections(data);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
+
   return (
     <main className="min-h-screen mx-6">
       <section className="container mx-auto mt-12 rounded-lg bg-(--primary-color) text-white">
         <div className="container mx-auto px-6 py-16 text-center lg:px-10">
-          <h1 className="text-3xl font-bold sm:text-4xl">सेवाका सर्तहरू</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">{t.termsHeroTitle}</h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-indigo-100 sm:text-base">
-            गुरुकुल टिभी प्रयोग गर्नुअघि कृपया यी सर्त तथा नियमहरू ध्यानपूर्वक
-            पढ्नुहोस्।
+            {t.termsHeroText}
           </p>
         </div>
       </section>
 
       <section className="container mx-auto px-6 py-12 lg:px-10">
         <div className="mx-auto max-w-3xl flex flex-col gap-8">
-          {TERMS_SECTIONS.map((section) => (
-            <div key={section.heading}>
-              <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
-                {section.heading}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base whitespace-pre-line">
-                {section.body}
-              </p>
-            </div>
-          ))}
+          {loading && (
+            <p className="text-center text-gray-400">लोड हुँदैछ...</p>
+          )}
+          {error && (
+            <p className="text-center text-red-500">
+              Error loading content: {error}
+            </p>
+          )}
+
+          {!loading &&
+            !error &&
+            termsSections.map((section) => (
+              <div key={section.heading}>
+                <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
+                  {section.heading}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base whitespace-pre-line">
+                  {section.body}
+                </p>
+              </div>
+            ))}
         </div>
       </section>
     </main>

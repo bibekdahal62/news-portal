@@ -1,20 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
+import { CATEGORIES } from "../../utils/categories";
+import NewsPreviewModal from "../../components/admin/NewsPreviewModal";
 import {
   MdEdit,
   MdDeleteOutline,
   MdVisibility,
   MdVisibilityOff,
+  MdRemoveRedEye,
+  MdChevronLeft,
+  MdChevronRight,
 } from "react-icons/md";
+
+const PAGE_SIZE = 8;
 
 function AdminNewsList() {
   const { news, deleteNews, togglePublish } = useNews();
   const [query, setQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [page, setPage] = useState(1);
   const [confirmId, setConfirmId] = useState(null);
+  const [previewItem, setPreviewItem] = useState(null);
 
-  const filtered = news.filter((n) =>
-    n.headline.toLowerCase().includes(query.toLowerCase()),
+  const filtered = news.filter((n) => {
+    const q = query.trim().toLowerCase();
+    const matchesQuery =
+      !q ||
+      n.headline.toLowerCase().includes(q) ||
+      (n.headline_en || "").toLowerCase().includes(q);
+
+    const matchesCategory =
+      categoryFilter === "all" || n.category === categoryFilter;
+
+    const isPublished = n.published !== false;
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "published" && isPublished) ||
+      (statusFilter === "draft" && !isPublished);
+
+    return matchesQuery && matchesCategory && matchesStatus;
+  });
+
+  // Reset to page 1 whenever a filter changes, so we never get stuck on
+  // an out-of-range page (e.g. was on page 3, filter now only has 1 page).
+  useEffect(() => {
+    setPage(1);
+  }, [query, categoryFilter, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
   );
 
   function handleDelete(id) {
@@ -29,7 +68,9 @@ function AdminNewsList() {
           <h1 className="text-2xl font-bold text-gray-900">
             समाचार व्यवस्थापन
           </h1>
-          <p className="text-gray-500">जम्मा {news.length} समाचार</p>
+          <p className="text-gray-500">
+            जम्मा {news.length} समाचार मध्ये {filtered.length} देखाइँदै
+          </p>
         </div>
         <Link
           to="/admin/news/new"
@@ -39,13 +80,38 @@ function AdminNewsList() {
         </Link>
       </div>
 
-      <input
-        type="text"
-        placeholder="शीर्षकद्वारा खोज्नुहोस्..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 mb-4 outline-none focus:ring-2 focus:ring-(--primary-color)"
-      />
+      <div className="flex flex-wrap gap-3 mb-4">
+        <input
+          type="text"
+          placeholder="शीर्षकद्वारा खोज्नुहोस्..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+        />
+
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) text-sm"
+        >
+          <option value="all">सबै श्रेणी</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) text-sm"
+        >
+          <option value="all">सबै स्थिति</option>
+          <option value="published">प्रकाशित</option>
+          <option value="draft">ड्राफ्ट</option>
+        </select>
+      </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
         <table className="w-full min-w-160 text-sm">
@@ -56,11 +122,11 @@ function AdminNewsList() {
               <th className="px-4 py-3 font-medium">लेखक</th>
               <th className="px-4 py-3 font-medium">हेराइ</th>
               <th className="px-4 py-3 font-medium">स्थिति</th>
-              <th className="px-4 py-3 font-medium w-40 text-right">कार्य</th>
+              <th className="px-4 py-3 font-medium w-48 text-right">कार्य</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {filtered.map((item) => {
+            {paged.map((item) => {
               const isPublished = item.published !== false;
               return (
                 <tr key={item.id} className="hover:bg-gray-50">
@@ -104,7 +170,14 @@ function AdminNewsList() {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => setPreviewItem(item)}
+                        className="p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
+                        title="पूर्वावलोकन"
+                      >
+                        <MdRemoveRedEye size={18} />
+                      </button>
                       <button
                         onClick={() => togglePublish(item.id)}
                         className={
@@ -144,7 +217,7 @@ function AdminNewsList() {
               );
             })}
 
-            {filtered.length === 0 && (
+            {paged.length === 0 && (
               <tr>
                 <td
                   colSpan={6}
@@ -157,6 +230,32 @@ function AdminNewsList() {
           </tbody>
         </table>
       </div>
+
+      {filtered.length > 0 && (
+        <div className="flex items-center justify-between mt-4">
+          <p className="text-sm text-gray-500">
+            पृष्ठ {currentPage} / {totalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-2 rounded border border-gray-300 text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
+              aria-label="अघिल्लो पृष्ठ"
+            >
+              <MdChevronLeft size={18} />
+            </button>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded border border-gray-300 text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
+              aria-label="अर्को पृष्ठ"
+            >
+              <MdChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {confirmId !== null && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
@@ -184,6 +283,13 @@ function AdminNewsList() {
             </div>
           </div>
         </div>
+      )}
+
+      {previewItem && (
+        <NewsPreviewModal
+          item={previewItem}
+          onClose={() => setPreviewItem(null)}
+        />
       )}
     </div>
   );

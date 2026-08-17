@@ -52,30 +52,40 @@ function App() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/news" element={<NewsPage category={"समाचार"} />} />
+          <Route
+            path="/news"
+            element={<NewsPage category={"समाचार"} categoryKey="news" />}
+          />
           <Route
             path="/news/economy"
-            element={<NewsPage category={"अर्थ"} />}
+            element={<NewsPage category={"अर्थ"} categoryKey="economic" />}
           />
           <Route
             path="/news/politics"
-            element={<NewsPage category={"राजनीति"} />}
+            element={<NewsPage category={"राजनीति"} categoryKey="politics" />}
           />
           <Route
             path="/news/local"
-            element={<NewsPage category={"स्थानिय"} />}
+            element={<NewsPage category={"स्थानिय"} categoryKey="local" />}
           />
           <Route
             path="/news/sports"
-            element={<NewsPage category={"खेलकुद"} />}
+            element={<NewsPage category={"खेलकुद"} categoryKey="sports" />}
           />
           <Route
             path="/news/entertainment"
-            element={<NewsPage category={"मनोरञ्जन"} />}
+            element={
+              <NewsPage category={"मनोरञ्जन"} categoryKey="entertainment" />
+            }
           />
           <Route
             path="/news/international"
-            element={<NewsPage category={"अन्तर्राष्ट्रिय"} />}
+            element={
+              <NewsPage
+                category={"अन्तर्राष्ट्रिय"}
+                categoryKey="international"
+              />
+            }
           />
           {/* Specific /news/* segments above are matched first by React
             Router; this dynamic one only catches numeric-style ids like
