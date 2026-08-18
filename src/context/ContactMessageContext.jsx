@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 const ContactMessageContext = createContext();
 
@@ -18,6 +18,7 @@ export function ContactMessageProvider({ children }) {
       subject,
       message,
       date: new Date().toLocaleString(),
+      read: false,
     };
     setMessages((prev) => [newMessage, ...prev]);
     return newMessage;
@@ -27,9 +28,40 @@ export function ContactMessageProvider({ children }) {
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }
 
+  function markAsRead(id) {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id && !m.read ? { ...m, read: true } : m)),
+    );
+  }
+
+  function markAsUnread(id) {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id && m.read ? { ...m, read: false } : m)),
+    );
+  }
+
+  function toggleRead(id) {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, read: !m.read } : m)),
+    );
+  }
+
+  const unreadCount = useMemo(
+    () => messages.filter((m) => !m.read).length,
+    [messages],
+  );
+
   return (
     <ContactMessageContext.Provider
-      value={{ messages, addMessage, deleteMessage }}
+      value={{
+        messages,
+        addMessage,
+        deleteMessage,
+        markAsRead,
+        markAsUnread,
+        toggleRead,
+        unreadCount,
+      }}
     >
       {children}
     </ContactMessageContext.Provider>

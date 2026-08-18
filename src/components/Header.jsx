@@ -53,6 +53,22 @@ function Header() {
     };
   }, []);
 
+  // Lock background scroll while the mobile/tablet nav drawer is open —
+  // without this, touch-scrolling inside the drawer (or dragging on the
+  // dimmed overlay) also scrolls the page underneath it. Restored on close
+  // and on unmount so it never gets left locked (e.g. if the component
+  // unmounts while the menu happens to be open).
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [isMenuOpen]);
+
   // Close the "More" dropdown when clicking anywhere outside it — hover
   // already closes it on mouse-leave, but a click-to-open (e.g. touchscreen
   // laptops) needs an explicit outside-click check too.
@@ -120,7 +136,7 @@ function Header() {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center justify-between rounded-t-lg bg-(--primary-color)">
+            <nav className="hidden lg:flex flex-wrap items-center justify-between gap-x-1 rounded-t-lg bg-(--primary-color)">
               <Link
                 to="/"
                 className="nav-styles"
@@ -233,6 +249,28 @@ function Header() {
                       </Link>
                     ))}
 
+                    <Link
+                      to={"/terms"}
+                      className="block nav-styles"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setMoreOpen(false);
+                      }}
+                    >
+                      {t.terms}
+                    </Link>
+
+                    <Link
+                      to={"/privacy"}
+                      className="block nav-styles"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setMoreOpen(false);
+                      }}
+                    >
+                      {t.privacy}
+                    </Link>
+
                     {moreCategories.length > 0 && (
                       <div className="border-t border-gray-100 my-1" />
                     )}
@@ -294,7 +332,7 @@ function Header() {
                 onClick={() => setIsMenuOpen(false)}
               />
               <nav
-                className={`absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-white flex flex-col overflow-y-auto transition-transform duration-200 ${
+                className={`absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-white flex flex-col overflow-y-auto overscroll-contain transition-transform duration-200 ${
                   isMenuOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
               >

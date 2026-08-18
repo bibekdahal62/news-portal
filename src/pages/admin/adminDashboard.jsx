@@ -211,15 +211,33 @@ function AdminDashboard() {
             <ul className="divide-y divide-gray-100">
               {recentMessages.map((msg) => (
                 <li key={msg.id} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {msg.name}
-                    </p>
-                    <p className="text-xs text-gray-400 shrink-0">{msg.date}</p>
-                  </div>
-                  <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                    {msg.subject}
-                  </p>
+                  <Link
+                    to="/admin/contact-messages"
+                    className="flex items-start gap-2 -mx-1 px-1 rounded hover:bg-gray-50"
+                  >
+                    {!msg.read && (
+                      <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <p
+                          className={`text-sm truncate ${
+                            msg.read
+                              ? "font-medium text-gray-700"
+                              : "font-semibold text-gray-900"
+                          }`}
+                        >
+                          {msg.name}
+                        </p>
+                        <p className="text-xs text-gray-400 shrink-0">
+                          {msg.date}
+                        </p>
+                      </div>
+                      <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                        {msg.subject}
+                      </p>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>

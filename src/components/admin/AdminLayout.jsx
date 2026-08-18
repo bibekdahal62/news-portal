@@ -17,6 +17,7 @@ import {
   MdGavel,
 } from "react-icons/md";
 import { useAdminAuth } from "../../context/AdminAuthContext";
+import { useContactMessages } from "../../context/ContactMessageContext";
 import { useNavigate, useLocation, NavLink, Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -26,7 +27,12 @@ const navItems = [
   { to: "/admin/ads", label: "विज्ञापन", icon: MdOutlineCampaign },
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
   { to: "/admin/gallery", label: "ग्यालरी", icon: MdOutlinePhotoLibrary },
-  { to: "/admin/contact-messages", label: "सन्देश", icon: MdMessage },
+  {
+    to: "/admin/contact-messages",
+    label: "सन्देश",
+    icon: MdMessage,
+    badgeKey: "unread",
+  },
   { to: "/admin/about", label: "हाम्रो बारेमा", icon: MdInfoOutline },
   { to: "/admin/privacy", label: "गोपनीयता नीति", icon: MdPrivacyTip },
   { to: "/admin/terms", label: "नियम तथा सर्तहरू", icon: MdGavel },
@@ -36,6 +42,7 @@ const navItems = [
 
 function AdminLayout() {
   const { logout } = useAdminAuth();
+  const { unreadCount } = useContactMessages();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,6 +50,21 @@ function AdminLayout() {
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
+
+  // Lock background scroll while the mobile/tablet drawer is open — without
+  // this, touch-scrolling inside the drawer (or on the dimmed overlay) also
+  // scrolls the page underneath it. Restored on close and on unmount so a
+  // route change or navigating away never leaves scroll permanently locked.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [menuOpen]);
 
   function handleLogout() {
     logout();
@@ -65,8 +87,8 @@ function AdminLayout() {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1 overflow-y-auto">
-        {navItems.map(({ to, label, icon: Icon, end }) => (
+      <nav className="flex-1 px-3 py-4 flex flex-col gap-1 overflow-y-auto overscroll-contain">
+        {navItems.map(({ to, label, icon: Icon, end, badgeKey }) => (
           <NavLink
             key={to}
             to={to}
@@ -80,7 +102,12 @@ function AdminLayout() {
             }
           >
             <Icon size={18} />
-            {label}
+            <span className="flex-1">{label}</span>
+            {badgeKey === "unread" && unreadCount > 0 && (
+              <span className="min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[11px] font-semibold flex items-center justify-center">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -118,7 +145,7 @@ function AdminLayout() {
   );
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div translate="no" className="min-h-screen flex bg-gray-50">
       <aside className="hidden lg:flex w-64 shrink-0 bg-(--primary-color) text-white flex-col">
         {sidebarContent}
       </aside>
