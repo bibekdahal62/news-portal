@@ -29,6 +29,9 @@ import AdminVideosList from "./pages/admin/adminVideosList";
 import AdminVideoForm from "./pages/admin/adminVideoForm";
 import AdminContactMessage from "./pages/admin/adminContactMessage";
 import AdminPrivacy from "./pages/admin/adminPrivacy";
+import AdminTerms from "./pages/admin/adminTerms";
+import AdminAbout from "./pages/admin/adminAbout";
+import AdminSettings from "./pages/admin/adminSettings";
 
 import AdminForgotPassword from "./pages/admin/adminForgotPassword";
 import AdminResetPassword from "./pages/admin/adminResetPassword";
@@ -83,7 +86,9 @@ function App() {
           />
           <Route
             path="/news/international"
-            element={<NewsPage category={"अन्तर्राष्ट्रिय"} categoryKey="news" />}
+            element={
+              <NewsPage category={"अन्तर्राष्ट्रिय"} categoryKey="news" />
+            }
           />
           <Route
             path="/news/category/:categoryId"
@@ -130,6 +135,9 @@ function App() {
             <Route path="videos/:id/edit" element={<AdminVideoForm />} />
             <Route path="contact-messages" element={<AdminContactMessage />} />
             <Route path="privacy" element={<AdminPrivacy />} />
+            <Route path="terms" element={<AdminTerms />} />
+            <Route path="about" element={<AdminAbout />} />
+            <Route path="settings" element={<AdminSettings />} />
 
             <Route path="categories" element={<AdminCategoriesList />} />
             <Route path="categories/new" element={<AdminCategoryForm />} />

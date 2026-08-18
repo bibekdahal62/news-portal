@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLang } from "../context/LanguageContext";
 import { useCategories } from "../context/CategoryContext";
+import { useSettings } from "../context/SettingsContext";
 import DateDisplay from "./DateDisplay";
 
 import SearchBar from "./SearchBar";
@@ -16,6 +17,8 @@ function Header() {
   const moreRef = useRef(null);
   const { t, lang } = useLang();
   const { navCategories } = useCategories();
+  const { settings } = useSettings();
+  const logoSrc = settings.logo || "/logo-nepali.png";
 
   // These 6 have dedicated, hardcoded links in the nav below (Economy
   // through International), same as the site's original design. Anything
@@ -88,7 +91,7 @@ function Header() {
                   {t.title}
                 </h1> */}
                 <div className="w-44 md:w-52 lg:w-62.5 h-auto">
-                  <img src="/logo-nepali.png" alt="site logo" />
+                  <img src={logoSrc} alt="site logo" />
                 </div>
               </Link>
 
@@ -289,7 +292,7 @@ function Header() {
               >
                 <div className="px-4 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
                   <div className="w-32 h-auto">
-                    <img src="/logo-nepali.png" alt="site logo" />
+                    <img src={logoSrc} alt="site logo" />
                   </div>
                   <button
                     onClick={() => setIsMenuOpen(false)}

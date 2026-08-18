@@ -10,27 +10,36 @@ import { VideoProvider } from "./context/VideoContext.jsx";
 import { AdminAuthProvider } from "./context/AdminAuthContext.jsx";
 import { ContactMessageProvider } from "./context/ContactMessageContext.jsx";
 import { PrivacyProvider } from "./context/PrivacyContext.jsx";
+import { TermsProvider } from "./context/TermsContext.jsx";
+import { AboutProvider } from "./context/AboutContext.jsx";
+import { SettingsProvider } from "./context/SettingsContext.jsx";
 import { CategoryProvider } from "./context/CategoryContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LanguageProvider>
       <AdminAuthProvider>
-        <NewsProvider>
-          <CategoryProvider>
-            <AdsProvider>
-              <VideoProvider>
-                <ContactMessageProvider>
-                  <PrivacyProvider>
-                    <BrowserRouter>
-                      <App />
-                    </BrowserRouter>
-                  </PrivacyProvider>
-                </ContactMessageProvider>
-              </VideoProvider>
-            </AdsProvider>
-          </CategoryProvider>
-        </NewsProvider>
+        <SettingsProvider>
+          <NewsProvider>
+            <CategoryProvider>
+              <AdsProvider>
+                <VideoProvider>
+                  <ContactMessageProvider>
+                    <PrivacyProvider>
+                      <TermsProvider>
+                        <AboutProvider>
+                          <BrowserRouter>
+                            <App />
+                          </BrowserRouter>
+                        </AboutProvider>
+                      </TermsProvider>
+                    </PrivacyProvider>
+                  </ContactMessageProvider>
+                </VideoProvider>
+              </AdsProvider>
+            </CategoryProvider>
+          </NewsProvider>
+        </SettingsProvider>
       </AdminAuthProvider>
     </LanguageProvider>
   </StrictMode>,

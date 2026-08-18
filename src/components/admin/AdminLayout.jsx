@@ -11,6 +11,9 @@ import {
   MdPrivacyTip,
   MdLockReset,
   MdCategory,
+  MdSettings,
+  MdInfoOutline,
+  MdGavel,
 } from "react-icons/md";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { useNavigate, useLocation, NavLink, Outlet } from "react-router-dom";
@@ -22,8 +25,11 @@ const navItems = [
   { to: "/admin/ads", label: "विज्ञापन", icon: MdOutlineCampaign },
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
   { to: "/admin/contact-messages", label: "सन्देश", icon: MdMessage },
+  { to: "/admin/about", label: "हाम्रो बारेमा", icon: MdInfoOutline },
   { to: "/admin/privacy", label: "गोपनीयता नीति", icon: MdPrivacyTip },
+  { to: "/admin/terms", label: "नियम तथा सर्तहरू", icon: MdGavel },
   { to: "/admin/categories", label: "श्रेणी", icon: MdCategory },
+  { to: "/admin/settings", label: "सेटिङ", icon: MdSettings },
 ];
 
 function AdminLayout() {
