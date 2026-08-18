@@ -7,6 +7,7 @@ import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { NewsProvider } from "./context/NewsContext.jsx";
 import { AdsProvider } from "./context/AdsContext.jsx";
 import { VideoProvider } from "./context/VideoContext.jsx";
+import { GalleryProvider } from "./context/GalleryContext.jsx";
 import { AdminAuthProvider } from "./context/AdminAuthContext.jsx";
 import { ContactMessageProvider } from "./context/ContactMessageContext.jsx";
 import { PrivacyProvider } from "./context/PrivacyContext.jsx";
@@ -24,17 +25,19 @@ createRoot(document.getElementById("root")).render(
             <CategoryProvider>
               <AdsProvider>
                 <VideoProvider>
-                  <ContactMessageProvider>
-                    <PrivacyProvider>
-                      <TermsProvider>
-                        <AboutProvider>
-                          <BrowserRouter>
-                            <App />
-                          </BrowserRouter>
-                        </AboutProvider>
-                      </TermsProvider>
-                    </PrivacyProvider>
-                  </ContactMessageProvider>
+                  <GalleryProvider>
+                    <ContactMessageProvider>
+                      <PrivacyProvider>
+                        <TermsProvider>
+                          <AboutProvider>
+                            <BrowserRouter>
+                              <App />
+                            </BrowserRouter>
+                          </AboutProvider>
+                        </TermsProvider>
+                      </PrivacyProvider>
+                    </ContactMessageProvider>
+                  </GalleryProvider>
                 </VideoProvider>
               </AdsProvider>
             </CategoryProvider>

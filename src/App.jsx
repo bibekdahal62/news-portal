@@ -17,6 +17,9 @@ import NewsCategoryPage from "./pages/newsCategory";
 
 import SearchResultsPage from "./pages/searchResults";
 
+import GalleryPage from "./pages/galleryPage";
+import GalleryDetail from "./pages/galleryDetail";
+
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminLogin from "./pages/admin/adminLogin";
@@ -39,6 +42,9 @@ import AdminChangePassword from "./pages/admin/adminChangePassword";
 
 import AdminCategoriesList from "./pages/admin/adminCategoriesList";
 import AdminCategoryForm from "./pages/admin/adminCategoryForm";
+
+import AdminGalleryList from "./pages/admin/adminGalleryList";
+import AdminGalleryForm from "./pages/admin/adminGalleryForm";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -102,6 +108,9 @@ function App() {
           <Route path="/videos" element={<VideosPage />} />
           <Route path="/videos/:id" element={<VideoDetail />} />
 
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/gallery/:id" element={<GalleryDetail />} />
+
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
@@ -133,6 +142,11 @@ function App() {
             <Route path="videos" element={<AdminVideosList />} />
             <Route path="videos/new" element={<AdminVideoForm />} />
             <Route path="videos/:id/edit" element={<AdminVideoForm />} />
+
+            <Route path="gallery" element={<AdminGalleryList />} />
+            <Route path="gallery/new" element={<AdminGalleryForm />} />
+            <Route path="gallery/:id/edit" element={<AdminGalleryForm />} />
+
             <Route path="contact-messages" element={<AdminContactMessage />} />
             <Route path="privacy" element={<AdminPrivacy />} />
             <Route path="terms" element={<AdminTerms />} />

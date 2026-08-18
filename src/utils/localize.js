@@ -38,3 +38,23 @@ export function localizeSection(section, lang) {
 export function localizeSectionList(list, lang) {
   return list.map((section) => localizeSection(section, lang));
 }
+
+// Same fallback pattern, for gallery albums: swaps title/description and
+// every image's caption for their English counterparts when lang === "en",
+// falling back to the Nepali text whenever the English one is empty.
+export function localizeAlbum(album, lang) {
+  if (!album) return album;
+  if (lang !== "en") return album;
+
+  return {
+    ...album,
+    title: album.title_en?.trim() ? album.title_en : album.title,
+    description: album.description_en?.trim()
+      ? album.description_en
+      : album.description,
+    images: (album.images || []).map((img) => ({
+      ...img,
+      caption: img.caption_en?.trim() ? img.caption_en : img.caption,
+    })),
+  };
+}

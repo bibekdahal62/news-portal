@@ -193,6 +193,14 @@ function Header() {
                 {t.videos}
               </Link>
 
+              <Link
+                to={"/gallery"}
+                className="nav-styles"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t.gallery}
+              </Link>
+
               <div
                 ref={moreRef}
                 className="relative"
@@ -401,6 +409,14 @@ function Header() {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t.videos}
+                  </Link>
+
+                  <Link
+                    to="/gallery"
+                    className="text-hover"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t.gallery}
                   </Link>
 
                   <Link
