@@ -10,6 +10,7 @@ import {
   MdClose,
   MdPrivacyTip,
   MdLockReset,
+  MdCategory,
 } from "react-icons/md";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { useNavigate, useLocation, NavLink, Outlet } from "react-router-dom";
@@ -22,6 +23,7 @@ const navItems = [
   { to: "/admin/videos", label: "भिडियो", icon: MdOutlineVideoLibrary },
   { to: "/admin/contact-messages", label: "सन्देश", icon: MdMessage },
   { to: "/admin/privacy", label: "गोपनीयता नीति", icon: MdPrivacyTip },
+  { to: "/admin/categories", label: "श्रेणी", icon: MdCategory },
 ];
 
 function AdminLayout() {

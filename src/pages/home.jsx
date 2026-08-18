@@ -43,7 +43,7 @@ function HomePage() {
               <div>
                 <div className="shadow-lg rounded-lg border border-gray-50">
                   <div className="px-10 py-6">
-                    <h3 className="text-3xl font-bold text-center">
+                    <h3 className="text-3xl font-bold text-center sm:text-left">
                       {t.featuredNews}
                     </h3>
                   </div>

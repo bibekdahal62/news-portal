@@ -5,7 +5,7 @@ import { useNews } from "../context/NewsContext";
 import { useLang } from "../context/LanguageContext";
 import AdBanner from "../components/AdBanner";
 
-function NewsPage({ category, categoryKey }) {
+function NewsPage({ category, categoryKey, headingOverride }) {
   const { news, getNewsByCategory } = useNews();
   const { t } = useLang();
 
@@ -17,7 +17,9 @@ function NewsPage({ category, categoryKey }) {
     );
 
   const displayNews = getNewsByCategory(category);
-  const heading = categoryKey && t[categoryKey] ? t[categoryKey] : category;
+  const heading =
+    headingOverride ??
+    (categoryKey && t[categoryKey] ? t[categoryKey] : category);
 
   return (
     <main className="mx-6">

@@ -1,37 +1,13 @@
-import { useEffect, useState } from "react";
 import { useLang } from "../context/LanguageContext";
 
 function TermsPage() {
-  const { t, lang } = useLang();
+  const { t, lang, loading, error } = useLang();
 
-  const [termsSections, setTermsSections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    fetch(`/locales/terms.${lang}.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch terms content");
-        return res.json();
-      })
-      .then((data) => {
-        if (!cancelled) setTermsSections(data);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [lang]);
+  // termsSections now lives inside en.json/ne.json (merged there instead
+  // of a separate terms.en.json/terms.ne.json fetch), so it's already
+  // loaded by the time LanguageProvider's own `loading` flips to false —
+  // no page-local fetch/loading/error state needed anymore.
+  const termsSections = t.termsSections || [];
 
   return (
     <main className="min-h-screen mx-6">
@@ -58,7 +34,7 @@ function TermsPage() {
           {!loading &&
             !error &&
             termsSections.map((section) => (
-              <div key={section.heading}>
+              <div key={`${lang}-${section.heading}`}>
                 <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
                   {section.heading}
                 </h2>

@@ -13,6 +13,8 @@ import VideosPage from "./pages/videosPage";
 import VideoDetail from "./pages/videoDetail";
 import TermsPage from "./pages/terms";
 
+import NewsCategoryPage from "./pages/newsCategory";
+
 import SearchResultsPage from "./pages/searchResults";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute";
@@ -31,6 +33,9 @@ import AdminPrivacy from "./pages/admin/adminPrivacy";
 import AdminForgotPassword from "./pages/admin/adminForgotPassword";
 import AdminResetPassword from "./pages/admin/adminResetPassword";
 import AdminChangePassword from "./pages/admin/adminChangePassword";
+
+import AdminCategoriesList from "./pages/admin/adminCategoriesList";
+import AdminCategoryForm from "./pages/admin/adminCategoryForm";
 
 // Public pages keep the site Header/Footer. Admin pages get their own
 // AdminLayout (sidebar) instead, so this splits the two into separate
@@ -58,34 +63,31 @@ function App() {
           />
           <Route
             path="/news/economy"
-            element={<NewsPage category={"अर्थ"} categoryKey="economic" />}
+            element={<NewsPage category={"अर्थ"} categoryKey="news" />}
           />
           <Route
             path="/news/politics"
-            element={<NewsPage category={"राजनीति"} categoryKey="politics" />}
+            element={<NewsPage category={"राजनीति"} categoryKey="news" />}
           />
           <Route
             path="/news/local"
-            element={<NewsPage category={"स्थानिय"} categoryKey="local" />}
+            element={<NewsPage category={"स्थानिय"} categoryKey="news" />}
           />
           <Route
             path="/news/sports"
-            element={<NewsPage category={"खेलकुद"} categoryKey="sports" />}
+            element={<NewsPage category={"खेलकुद"} categoryKey="news" />}
           />
           <Route
             path="/news/entertainment"
-            element={
-              <NewsPage category={"मनोरञ्जन"} categoryKey="entertainment" />
-            }
+            element={<NewsPage category={"मनोरञ्जन"} categoryKey="news" />}
           />
           <Route
             path="/news/international"
-            element={
-              <NewsPage
-                category={"अन्तर्राष्ट्रिय"}
-                categoryKey="international"
-              />
-            }
+            element={<NewsPage category={"अन्तर्राष्ट्रिय"} categoryKey="news" />}
+          />
+          <Route
+            path="/news/category/:categoryId"
+            element={<NewsCategoryPage />}
           />
           {/* Specific /news/* segments above are matched first by React
             Router; this dynamic one only catches numeric-style ids like
@@ -128,6 +130,10 @@ function App() {
             <Route path="videos/:id/edit" element={<AdminVideoForm />} />
             <Route path="contact-messages" element={<AdminContactMessage />} />
             <Route path="privacy" element={<AdminPrivacy />} />
+
+            <Route path="categories" element={<AdminCategoriesList />} />
+            <Route path="categories/new" element={<AdminCategoryForm />} />
+            <Route path="categories/:id/edit" element={<AdminCategoryForm />} />
           </Route>
         </Route>
       </Routes>

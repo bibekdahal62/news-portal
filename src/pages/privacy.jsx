@@ -1,41 +1,21 @@
-import { useEffect, useState } from "react";
 import { usePrivacy } from "../context/PrivacyContext";
 import { useLang } from "../context/LanguageContext";
+import { localizeSectionList } from "../utils/localize";
 
 function PrivacyPage() {
   const { sections } = usePrivacy();
-  const { t, lang } = useLang();
+  const { t, lang, loading, error } = useLang();
 
-  const [defaultSections, setDefaultSections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // privacySections now lives inside en.json/ne.json (merged there instead
+  // of a separate privacy.en.json/privacy.ne.json fetch), so it's already
+  // loaded by the time LanguageProvider's own `loading` flips to false —
+  // no page-local fetch/loading/error state needed anymore.
+  const defaultSections = t.privacySections || [];
 
-  // Re-fetch whenever the language changes, same fetch-from-/public
-  // pattern as news-data.json and the locale files.
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    fetch(`/locales/privacy.${lang}.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch privacy content");
-        return res.json();
-      })
-      .then((data) => {
-        if (!cancelled) setDefaultSections(data);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [lang]);
+  // Admin-added sections now carry both heading/body (Nepali) and
+  // heading_en/body_en (English, optional) — localize them the same way
+  // news content is localized, falling back to Nepali if English is blank.
+  const localizedSections = localizeSectionList(sections, lang);
 
   return (
     <main className="min-h-screen mx-6">
@@ -64,7 +44,7 @@ function PrivacyPage() {
           {!loading &&
             !error &&
             defaultSections.map((section) => (
-              <div key={section.heading}>
+              <div key={`${lang}-${section.heading}`}>
                 <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
                   {section.heading}
                 </h2>
@@ -76,7 +56,7 @@ function PrivacyPage() {
 
           {sections.length > 0 && (
             <div className="border-t border-gray-100 pt-8 flex flex-col gap-8">
-              {sections.map((section) => (
+              {localizedSections.map((section) => (
                 <div key={section.id}>
                   <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
                     {section.heading}

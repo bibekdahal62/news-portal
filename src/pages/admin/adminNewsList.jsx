@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
-import { CATEGORIES } from "../../utils/categories";
+import { useCategories } from "../../context/CategoryContext";
 import NewsPreviewModal from "../../components/admin/NewsPreviewModal";
 import {
   MdEdit,
@@ -23,6 +23,7 @@ function AdminNewsList() {
   const [page, setPage] = useState(1);
   const [confirmId, setConfirmId] = useState(null);
   const [previewItem, setPreviewItem] = useState(null);
+  const { categories } = useCategories();
 
   const filtered = news.filter((n) => {
     const q = query.trim().toLowerCase();
@@ -95,9 +96,9 @@ function AdminNewsList() {
           className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) text-sm"
         >
           <option value="all">सबै श्रेणी</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.name}>
+              {cat.name}
             </option>
           ))}
         </select>
@@ -122,7 +123,8 @@ function AdminNewsList() {
               <th className="px-4 py-3 font-medium">लेखक</th>
               <th className="px-4 py-3 font-medium">हेराइ</th>
               <th className="px-4 py-3 font-medium">स्थिति</th>
-              <th className="px-4 py-3 font-medium w-48 text-right">कार्य</th>
+              <th className="px-4 py-3 font-medium text-center">पूर्वावलोकन</th>
+              <th className="px-4 py-3 font-medium w-40 text-right">कार्य</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -169,15 +171,17 @@ function AdminNewsList() {
                       </span>
                     )}
                   </td>
+                  <td className="px-4 py-3 text-center">
+                    <button
+                      onClick={() => setPreviewItem(item)}
+                      className="p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
+                      title="पूर्वावलोकन"
+                    >
+                      <MdRemoveRedEye size={18} />
+                    </button>
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <button
-                        onClick={() => setPreviewItem(item)}
-                        className="p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
-                        title="पूर्वावलोकन"
-                      >
-                        <MdRemoveRedEye size={18} />
-                      </button>
                       <button
                         onClick={() => togglePublish(item.id)}
                         className={
@@ -220,7 +224,7 @@ function AdminNewsList() {
             {paged.length === 0 && (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="px-4 py-10 text-center text-gray-400"
                 >
                   कुनै समाचार फेला परेन।

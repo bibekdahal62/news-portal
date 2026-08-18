@@ -6,7 +6,10 @@ import {
   MdArticle,
   MdOutlineCampaign,
   MdOutlineVideoLibrary,
+  MdCategory,
 } from "react-icons/md";
+
+import { useCategories } from "../../context/CategoryContext";
 
 function StatCard({ icon: Icon, label, value, to }) {
   return (
@@ -29,6 +32,7 @@ function AdminDashboard() {
   const { news } = useNews();
   const { ads } = useAds();
   const { videos } = useVideos();
+  const { categories } = useCategories();
 
   return (
     <div>
@@ -37,7 +41,7 @@ function AdminDashboard() {
         तपाईंको न्युज पोर्टलको संक्षिप्त विवरण
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
         <StatCard
           icon={MdArticle}
           label="कुल समाचार"
@@ -55,6 +59,12 @@ function AdminDashboard() {
           label="भिडियोहरू"
           value={videos.length}
           to="/admin/videos"
+        />
+        <StatCard
+          icon={MdCategory}
+          label="कुल श्रेणी"
+          value={categories.length}
+          to="/admin/categories"
         />
       </div>
 
