@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { useAds } from "../../context/AdsContext";
 import { useVideos } from "../../context/VideoContext";
+import { useGallery } from "../../context/GalleryContext";
 import { useContactMessages } from "../../context/ContactMessageContext";
 import { useCategories } from "../../context/CategoryContext";
 import { displayTime } from "../../utils/time";
@@ -9,6 +10,7 @@ import {
   MdArticle,
   MdOutlineCampaign,
   MdOutlineVideoLibrary,
+  MdOutlinePhotoLibrary,
   MdCategory,
   MdMailOutline,
   MdEdit,
@@ -35,6 +37,7 @@ function AdminDashboard() {
   const { news } = useNews();
   const { ads } = useAds();
   const { videos } = useVideos();
+  const { albums } = useGallery();
   const { categories } = useCategories();
   const { messages } = useContactMessages();
 
@@ -53,7 +56,7 @@ function AdminDashboard() {
         तपाईंको न्युज पोर्टलको संक्षिप्त विवरण
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
         <StatCard
           icon={MdArticle}
           label="कुल समाचार"
@@ -71,6 +74,12 @@ function AdminDashboard() {
           label="भिडियोहरू"
           value={videos.length}
           to="/admin/videos"
+        />
+        <StatCard
+          icon={MdOutlinePhotoLibrary}
+          label="ग्यालरीहरू"
+          value={albums.length}
+          to="/admin/gallery"
         />
         <StatCard
           icon={MdCategory}
@@ -106,6 +115,12 @@ function AdminDashboard() {
             className="px-4 py-2 rounded-md border border-(--primary-color) text-(--primary-color) text-sm font-medium hover:bg-(--primary-color)/5"
           >
             + नयाँ भिडियो
+          </Link>
+          <Link
+            to="/admin/gallery/new"
+            className="px-4 py-2 rounded-md border border-(--primary-color) text-(--primary-color) text-sm font-medium hover:bg-(--primary-color)/5"
+          >
+            + नयाँ ग्यालरी
           </Link>
           <Link
             to="/admin/contact-messages"
