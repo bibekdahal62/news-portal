@@ -132,5 +132,11 @@
       "heading": "Contact Information",
       "body": "For any questions or inquiries regarding these terms of service, please contact us through our contact page."
     }
-  ]
+  ],
+  "newsLoading": "Loading news...",
+  "newsLoadError": "Something went wrong while loading news.",
+  "categoryNoNews": "No news published in this category yet.",
+  "categoryNoNewsHint": "Please check back later or browse another category.",
+  "featuredEmpty": "No featured news yet.",
+  "trendingEmpty": "No trending stories yet."
 }

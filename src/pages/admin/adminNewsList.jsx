@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { useCategories } from "../../context/CategoryContext";
 import NewsPreviewModal from "../../components/admin/NewsPreviewModal";
+import { displayTime } from "../../utils/time";
 import {
   MdEdit,
   MdDeleteOutline,
@@ -121,6 +122,7 @@ function AdminNewsList() {
               <th className="px-4 py-3 font-medium">समाचार</th>
               <th className="px-4 py-3 font-medium">श्रेणी</th>
               <th className="px-4 py-3 font-medium">लेखक</th>
+              <th className="px-4 py-3 font-medium">मिति</th>
               <th className="px-4 py-3 font-medium">हेराइ</th>
               <th className="px-4 py-3 font-medium">स्थिति</th>
               <th className="px-4 py-3 font-medium text-center">पूर्वावलोकन</th>
@@ -146,6 +148,11 @@ function AdminNewsList() {
                             ब्रेकिङ
                           </span>
                         )}
+                        {item.isFeatured && (
+                          <span className="ml-2 inline-block bg-blue-100 text-blue-700 text-[10px] font-bold px-1.5 py-0.5 rounded align-middle">
+                            फिचर
+                          </span>
+                        )}
                       </span>
                     </div>
                   </td>
@@ -156,6 +163,9 @@ function AdminNewsList() {
                   </td>
                   <td className="px-4 py-3 text-gray-600">
                     {item.author || "—"}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                    {displayTime(item)}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
                     {typeof item.views === "number" ? item.views : "—"}
@@ -224,7 +234,7 @@ function AdminNewsList() {
             {paged.length === 0 && (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-4 py-10 text-center text-gray-400"
                 >
                   कुनै समाचार फेला परेन।

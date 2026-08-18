@@ -1,10 +1,8 @@
+import { useEffect, useState } from "react";
 import { useAds } from "../context/AdsContext";
 
 // Renders every active ad assigned to `slot`, optionally further filtered
-// by which page it's allowed to appear on (`page="home"` or `page="news"`),
-// matching the ad's showOnHome/showOnNews checkboxes set in the admin
-// panel. If `page` is omitted, only slot + active are checked (used by
-// pages like videos that aren't part of the home/news targeting feature).
+// by which page it's allowed to appear on.
 function AdBanner({ slot, page }) {
   const { ads } = useAds();
 
@@ -15,11 +13,33 @@ function AdBanner({ slot, page }) {
     return true;
   });
 
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+
+  // Rotate home-top ads every 5 seconds
+  useEffect(() => {
+    if (slot !== "home-top" || slotAds.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentAdIndex((prevIndex) => (prevIndex + 1) % slotAds.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [slot, slotAds.length]);
+
+  // Reset index if the ads change
+  useEffect(() => {
+    setCurrentAdIndex(0);
+  }, [slot, slotAds.length]);
+
   if (slotAds.length === 0) return null;
+
+  // For home-top, show only the current ad
+  const displayedAds =
+    slot === "home-top" ? [slotAds[currentAdIndex]] : slotAds;
 
   return (
     <div className="flex flex-col gap-4 mb-6 w-full xl:min-w-sm shadow-lg">
-      {slotAds.map((ad) => (
+      {displayedAds.map((ad) => (
         <a
           key={ad.id}
           href={ad.link}
@@ -30,13 +50,14 @@ function AdBanner({ slot, page }) {
           <span className="absolute top-2 left-2 bg-black/60 text-white text-sm uppercase tracking-wide px-2 py-0.5 rounded">
             विज्ञापन
           </span>
+
           <img
             src={ad.image}
             alt={ad.alt || "Advertisement"}
             className={
               slot === "home-side"
-                ? `w-full xl:max-w-md object-contain h-full`
-                : `w-full object-contain max-h-64`
+                ? "w-full xl:max-w-md object-contain h-full"
+                : "w-full object-contain max-h-64"
             }
           />
         </a>

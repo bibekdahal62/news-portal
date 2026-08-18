@@ -17,11 +17,11 @@ function HomePage() {
     <main className="min-h-screen mt-12 mx-6">
       <section>
         <div className="mb-8">
-          {loading && <p className="text-2xl text-center"> Loading News..</p>}
+          {loading && <p className="text-2xl text-center">{t.newsLoading}</p>}
 
           {error && (
             <p className="text-2xl text-center text-red-500">
-              Error loading News: {error}
+              {t.newsLoadError}
             </p>
           )}
 
@@ -47,7 +47,13 @@ function HomePage() {
                       {t.featuredNews}
                     </h3>
                   </div>
-                  <NewsContainer newsData={featuredNews} limit={8} />
+                  {featuredNews.length === 0 ? (
+                    <p className="text-center text-gray-400 py-14">
+                      {t.featuredEmpty}
+                    </p>
+                  ) : (
+                    <NewsContainer newsData={featuredNews} limit={8} />
+                  )}
                 </div>
                 <div className="container mx-auto mt-10">
                   <AdBanner slot="home-bottom" page="home" />

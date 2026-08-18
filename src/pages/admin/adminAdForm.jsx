@@ -11,6 +11,8 @@ const EMPTY_FORM = {
   active: true,
   showOnHome: true,
   showOnNews: true,
+  startDate: "",
+  endDate: "",
 };
 
 function AdminAdForm() {
@@ -64,6 +66,11 @@ function AdminAdForm() {
 
     if (!form.image.trim() || !form.link.trim()) {
       setErrorMsg("कृपया तस्बिर र लिंक भर्नुहोस्।");
+      return;
+    }
+
+    if (form.startDate && form.endDate && form.endDate < form.startDate) {
+      setErrorMsg("अन्त्य मिति सुरु मितिभन्दा पछिको हुनुपर्छ।");
       return;
     }
 
@@ -150,6 +157,34 @@ function AdminAdForm() {
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           />
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              सुरु मिति (वैकल्पिक)
+            </label>
+            <input
+              type="date"
+              value={form.startDate}
+              onChange={handleChange("startDate")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              अन्त्य मिति (वैकल्पिक)
+            </label>
+            <input
+              type="date"
+              value={form.endDate}
+              onChange={handleChange("endDate")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            />
+          </div>
+        </div>
+        <p className="text-xs text-gray-400 -mt-2">
+          मिति खाली छोडे विज्ञापन "सक्रिय" रहुन्जेल जहिले पनि देखिन्छ।
+        </p>
 
         <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
           <input
