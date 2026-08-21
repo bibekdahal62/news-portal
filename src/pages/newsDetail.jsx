@@ -5,6 +5,8 @@ import { localizeNews } from "../utils/localize";
 import { displayTime, fullDateTimeNe, formatViewsNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
+import ShareButtons from "../components/ShareButtons";
+import RelatedNews from "../components/RelatedNews";
 
 function NewsDetail() {
   const { id } = useParams();
@@ -28,8 +30,6 @@ function NewsDetail() {
 
   const article = localizeNews(rawArticle, lang);
 
-  // Older/admin-added items may not have a separate long-form `content`
-  // yet; fall back to the short description so the page never renders blank.
   const body = article.content?.trim() ? article.content : article.description;
 
   return (
@@ -74,7 +74,7 @@ function NewsDetail() {
           </p>
 
           {Array.isArray(article.tags) && article.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-10">
+            <div className="flex flex-wrap gap-2 mb-6">
               {article.tags.map((tag) => (
                 <span
                   key={tag}
@@ -86,9 +86,16 @@ function NewsDetail() {
             </div>
           )}
 
+          <ShareButtons title={article.headline} />
+
           <Link to="/" className="text-(--primary-color) underline">
             {lang === "en" ? "← Back to home" : "← गृहपृष्ठमा फर्कनुहोस्"}
           </Link>
+
+          <RelatedNews
+            category={rawArticle.category}
+            excludeId={rawArticle.id}
+          />
         </section>
 
         <aside>

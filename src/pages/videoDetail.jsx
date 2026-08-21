@@ -1,13 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import { useVideos } from "../context/VideoContext";
 import { youtubeEmbedUrl } from "../utils/youtube";
+import { displayTime, fullDateTimeNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
 
 function VideoDetail() {
   const { id } = useParams();
   const { getVideoById } = useVideos();
-  const video = getVideoById(id);
+  const rawVideo = getVideoById(id);
+  const video = rawVideo && rawVideo.published !== false ? rawVideo : null;
 
   if (!video) {
     return (
@@ -34,9 +36,23 @@ function VideoDetail() {
             />
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-3">
+          {video.category && (
+            <span className="inline-block bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded mb-3">
+              {video.category}
+            </span>
+          )}
+
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
             {video.title}
           </h1>
+
+          <p
+            className="text-sm text-gray-400 mb-6"
+            title={fullDateTimeNe(video)}
+          >
+            {displayTime(video)}
+          </p>
+
           {video.description && (
             <p className="text-gray-600 leading-relaxed whitespace-pre-line mb-10">
               {video.description}

@@ -1,19 +1,36 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useVideos } from "../../context/VideoContext";
+import { useCategories } from "../../context/CategoryContext";
 import { extractYouTubeId, youtubeEmbedUrl } from "../../utils/youtube";
+import { toDatetimeLocalValue, fromDatetimeLocalValue } from "../../utils/time";
 
-const EMPTY_FORM = { title: "", youtubeUrl: "", description: "" };
+const EMPTY_FORM = {
+  title: "",
+  youtubeUrl: "",
+  description: "",
+  category: "",
+  published: true,
+  publishedAtLocal: "",
+};
 
 function AdminVideoForm() {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const { getVideoById, addVideo, updateVideo } = useVideos();
+  const { enabledCategories } = useCategories();
 
   const existing = isEdit ? getVideoById(id) : null;
   const [form, setForm] = useState(
-    existing ? { ...EMPTY_FORM, ...existing } : EMPTY_FORM,
+    existing
+      ? {
+          ...EMPTY_FORM,
+          ...existing,
+          published: existing.published !== false,
+          publishedAtLocal: toDatetimeLocalValue(existing.publishedAt),
+        }
+      : { ...EMPTY_FORM, publishedAtLocal: toDatetimeLocalValue() },
   );
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -34,6 +51,10 @@ function AdminVideoForm() {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
   }
 
+  function handleCheckbox(field) {
+    return (e) => setForm((f) => ({ ...f, [field]: e.target.checked }));
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     setErrorMsg("");
@@ -43,11 +64,17 @@ function AdminVideoForm() {
       return;
     }
 
+    const { publishedAtLocal, ...rest } = form;
+    const payload = {
+      ...rest,
+      publishedAt: fromDatetimeLocalValue(publishedAtLocal),
+    };
+
     try {
       if (isEdit) {
-        updateVideo(existing.id, form);
+        updateVideo(existing.id, payload);
       } else {
-        addVideo(form);
+        addVideo(payload);
       }
       navigate("/admin/videos");
     } catch (err) {
@@ -81,6 +108,41 @@ function AdminVideoForm() {
             onChange={handleChange("title")}
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              श्रेणी
+            </label>
+            <select
+              value={form.category}
+              onChange={handleChange("category")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            >
+              <option value="">श्रेणी छान्नुहोस्</option>
+              {enabledCategories.map((cat) => (
+                <option key={cat.id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              प्रकाशित मिति र समय
+            </label>
+            <input
+              type="datetime-local"
+              value={form.publishedAtLocal}
+              onChange={handleChange("publishedAtLocal")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              भविष्यको मिति राखेर भिडियो तालिकाबद्ध (scheduled) राख्न सकिन्छ।
+            </p>
+          </div>
         </div>
 
         <div>
@@ -125,12 +187,29 @@ function AdminVideoForm() {
           />
         </div>
 
+        <div>
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={form.published}
+              onChange={handleCheckbox("published")}
+              className="rounded border-gray-300 text-(--primary-color) focus:ring-(--primary-color)"
+            />
+            प्रकाशित गर्नुहोस् (अनचेक गरे ड्राफ्टमा रहन्छ, सार्वजनिक पृष्ठमा
+            देखिँदैन)
+          </label>
+        </div>
+
         <div className="flex gap-3 pt-2">
           <button
             type="submit"
             className="px-5 py-2.5 rounded-md bg-(--primary-color) text-white text-sm font-medium hover:opacity-90 cursor-pointer"
           >
-            {isEdit ? "अपडेट गर्नुहोस्" : "थप्नुहोस्"}
+            {isEdit
+              ? "अपडेट गर्नुहोस्"
+              : form.published
+                ? "प्रकाशित गर्नुहोस्"
+                : "ड्राफ्ट सुरक्षित गर्नुहोस्"}
           </button>
           <Link
             to="/admin/videos"
