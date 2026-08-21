@@ -77,10 +77,6 @@ function AdminLogin() {
         >
           लगइन
         </button>
-
-        <p className="mt-4 text-xs text-gray-400">
-          डेमो लगइन: admin / admin123
-        </p>
       </form>
     </div>
   );
