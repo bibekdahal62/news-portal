@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useAds } from "../../context/AdsContext";
-import { fileToDataUrl } from "../../utils/file";
+import {
+  FormField,
+  SelectField,
+  CheckboxField,
+  ImageUploadField,
+  FormAlert,
+  FormActions,
+} from "../../components/admin/common";
 
 const EMPTY_FORM = {
   slot: "home-top",
@@ -11,6 +18,8 @@ const EMPTY_FORM = {
   active: true,
   showOnHome: true,
   showOnNews: true,
+  startDate: "",
+  endDate: "",
 };
 
 function AdminAdForm() {
@@ -45,25 +54,17 @@ function AdminAdForm() {
       }));
   }
 
-  async function handleImageChange(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setErrorMsg("");
-      const dataUrl = await fileToDataUrl(file);
-      setForm((f) => ({ ...f, image: dataUrl }));
-    } catch (err) {
-      setErrorMsg(err.message);
-    }
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
     setErrorMsg("");
 
     if (!form.image.trim() || !form.link.trim()) {
       setErrorMsg("कृपया तस्बिर र लिंक भर्नुहोस्।");
+      return;
+    }
+
+    if (form.startDate && form.endDate && form.endDate < form.startDate) {
+      setErrorMsg("अन्त्य मिति सुरु मितिभन्दा पछिको हुनुपर्छ।");
       return;
     }
 
@@ -85,114 +86,81 @@ function AdminAdForm() {
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 max-w-2xl flex flex-col gap-4"
       >
-        {errorMsg && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">
-            {errorMsg}
-          </p>
-        )}
+        <FormAlert>{errorMsg}</FormAlert>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            स्थान (Slot)
-          </label>
-          <select
-            value={form.slot}
-            onChange={handleChange("slot")}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          >
-            <option value="home-top">गृहपृष्ठ - समाचार सूची माथि</option>
-            <option value="home-side">गृहपृष्ठ - समाचार सूची छेउमा</option>
-            <option value="home-bottom">गृहपृष्ठ - समाचार सूची तल</option>
-          </select>
-        </div>
+        <SelectField
+          label="स्थान (Slot)"
+          value={form.slot}
+          onChange={handleChange("slot")}
+        >
+          <option value="home-top">गृहपृष्ठ - समाचार सूची माथि</option>
+          <option value="home-side">गृहपृष्ठ - समाचार सूची छेउमा</option>
+          <option value="home-bottom">गृहपृष्ठ - समाचार सूची तल</option>
+        </SelectField>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            विज्ञापन तस्बिर
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-(--primary-color) file:text-white file:text-sm file:font-medium file:cursor-pointer cursor-pointer"
+        <ImageUploadField
+          label="विज्ञापन तस्बिर"
+          value={form.image}
+          onChange={(dataUrl) => setForm((f) => ({ ...f, image: dataUrl }))}
+          onError={setErrorMsg}
+        />
+
+        <FormField
+          label="क्लिक गर्दा जाने लिंक"
+          type="url"
+          value={form.link}
+          onChange={handleChange("link")}
+          placeholder="https://advertiser-site.com"
+        />
+
+        <FormField
+          label="वैकल्पिक विवरण (alt text)"
+          type="text"
+          value={form.alt}
+          onChange={handleChange("alt")}
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormField
+            label="सुरु मिति (वैकल्पिक)"
+            type="date"
+            value={form.startDate}
+            onChange={handleChange("startDate")}
           />
-          {form.image && (
-            <img
-              src={form.image}
-              alt="preview"
-              className="mt-2 h-32 w-full object-cover rounded border border-gray-100"
-              onError={(e) => (e.target.style.display = "none")}
-            />
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            क्लिक गर्दा जाने लिंक
-          </label>
-          <input
-            type="url"
-            value={form.link}
-            onChange={handleChange("link")}
-            placeholder="https://advertiser-site.com"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+          <FormField
+            label="अन्त्य मिति (वैकल्पिक)"
+            type="date"
+            value={form.endDate}
+            onChange={handleChange("endDate")}
           />
         </div>
+        <p className="text-xs text-gray-400 -mt-2">
+          मिति खाली छोडे विज्ञापन "सक्रिय" रहुन्जेल जहिले पनि देखिन्छ।
+        </p>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            वैकल्पिक विवरण (alt text)
-          </label>
-          <input
-            type="text"
-            value={form.alt}
-            onChange={handleChange("alt")}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
-        </div>
-
-        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={form.active}
-            onChange={handleChange("active")}
-          />
-          सक्रिय
-        </label>
+        <CheckboxField
+          label="सक्रिय"
+          checked={form.active}
+          onChange={handleChange("active")}
+        />
 
         <div className="flex flex-wrap gap-6">
-          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.showOnHome}
-              onChange={handleChange("showOnHome")}
-            />
-            गृहपृष्ठमा देखाउने (Home page)
-          </label>
-          <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.showOnNews}
-              onChange={handleChange("showOnNews")}
-            />
-            समाचार पृष्ठमा देखाउने (News page)
-          </label>
+          <CheckboxField
+            label="गृहपृष्ठमा देखाउने (Home page)"
+            checked={form.showOnHome}
+            onChange={handleChange("showOnHome")}
+          />
+          <CheckboxField
+            label="समाचार पृष्ठमा देखाउने (News page)"
+            checked={form.showOnNews}
+            onChange={handleChange("showOnNews")}
+          />
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            className="px-5 py-2.5 rounded-md bg-(--primary-color) text-white text-sm font-medium hover:opacity-90 cursor-pointer"
-          >
-            {isEdit ? "अपडेट गर्नुहोस्" : "थप्नुहोस्"}
-          </button>
-          <Link
-            to="/admin/ads"
-            className="px-5 py-2.5 rounded-md border border-gray-300 text-sm font-medium hover:bg-gray-50"
-          >
-            रद्द गर्नुहोस्
-          </Link>
-        </div>
+        <FormActions
+          submitLabel={isEdit ? "अपडेट गर्नुहोस्" : "थप्नुहोस्"}
+          cancelTo="/admin/ads"
+        />
       </form>
     </div>
   );

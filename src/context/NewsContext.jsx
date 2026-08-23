@@ -40,9 +40,9 @@ export function NewsProvider({ children }) {
       isBreaking: false,
       isFeatured: false,
       published: true,
+      publishedAt: new Date().toISOString(),
       ...newsItem,
       id,
-      publishedAt: new Date().toISOString(),
     };
     setNews((prev) => [item, ...prev]);
     return item;

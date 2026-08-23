@@ -2,7 +2,7 @@ import { useState } from "react";
 import { usePrivacy } from "../../context/PrivacyContext";
 import { MdEdit, MdDeleteOutline } from "react-icons/md";
 
-const EMPTY_FORM = { heading: "", body: "" };
+const EMPTY_FORM = { heading: "", heading_en: "", body: "", body_en: "" };
 
 function AdminPrivacy() {
   const { sections, addSection, updateSection, deleteSection } = usePrivacy();
@@ -10,6 +10,7 @@ function AdminPrivacy() {
   const [editingId, setEditingId] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [confirmId, setConfirmId] = useState(null);
+  const [activeTab, setActiveTab] = useState("ne"); // "ne" | "en"
 
   function handleChange(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -19,8 +20,12 @@ function AdminPrivacy() {
     e.preventDefault();
     setErrorMsg("");
 
+    // Nepali is required/primary (matches the news form's convention);
+    // English is optional — the site falls back to Nepali wherever the
+    // English field is left blank, via localizeSection().
     if (!form.heading.trim() || !form.body.trim()) {
-      setErrorMsg("कृपया शीर्षक र विवरण दुवै भर्नुहोस्।");
+      setActiveTab("ne");
+      setErrorMsg("कृपया नेपाली शीर्षक र विवरण दुवै भर्नुहोस्।");
       return;
     }
 
@@ -31,18 +36,26 @@ function AdminPrivacy() {
     }
     setForm(EMPTY_FORM);
     setEditingId(null);
+    setActiveTab("ne");
   }
 
   function handleEdit(section) {
     setEditingId(section.id);
-    setForm({ heading: section.heading, body: section.body });
+    setForm({
+      heading: section.heading || "",
+      heading_en: section.heading_en || "",
+      body: section.body || "",
+      body_en: section.body_en || "",
+    });
     setErrorMsg("");
+    setActiveTab("ne");
   }
 
   function handleCancelEdit() {
     setEditingId(null);
     setForm(EMPTY_FORM);
     setErrorMsg("");
+    setActiveTab("ne");
   }
 
   function handleDelete(id) {
@@ -51,13 +64,20 @@ function AdminPrivacy() {
     if (editingId === id) handleCancelEdit();
   }
 
+  const tabBtnClass = (tab) =>
+    `px-4 py-2 text-sm font-medium border-b-2 -mb-px cursor-pointer ${
+      activeTab === tab
+        ? "border-(--primary-color) text-(--primary-color)"
+        : "border-transparent text-gray-500 hover:text-gray-700"
+    }`;
+
   return (
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">गोपनीयता नीति</h1>
         <p className="text-gray-500 mt-1">
           पूर्वनिर्धारित नीतिमा थप खण्डहरू (sections) थप्नुहोस्, सम्पादन
-          गर्नुहोस् वा हटाउनुहोस्।
+          गर्नुहोस् वा हटाउनुहोस्। नेपाली र अंग्रेजी दुवै भाषामा भर्न सकिन्छ।
         </p>
       </div>
 
@@ -75,28 +95,86 @@ function AdminPrivacy() {
           </p>
         )}
 
+        {/* Language tabs: Nepali is required/primary, English is optional,
+          same convention as the news form. */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            शीर्षक
-          </label>
-          <input
-            type="text"
-            value={form.heading}
-            onChange={handleChange("heading")}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
-        </div>
+          <div className="flex border-b border-gray-200 mb-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab("ne")}
+              className={tabBtnClass("ne")}
+            >
+              नेपाली *
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("en")}
+              className={tabBtnClass("en")}
+            >
+              English
+            </button>
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            विवरण
-          </label>
-          <textarea
-            value={form.body}
-            onChange={handleChange("body")}
-            rows={5}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
+          {activeTab === "ne" && (
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  शीर्षक
+                </label>
+                <input
+                  type="text"
+                  value={form.heading}
+                  onChange={handleChange("heading")}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  विवरण
+                </label>
+                <textarea
+                  value={form.body}
+                  onChange={handleChange("body")}
+                  rows={5}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+            </div>
+          )}
+
+          {activeTab === "en" && (
+            <div className="flex flex-col gap-4">
+              <p className="text-xs text-gray-400 -mt-1">
+                Optional — if left blank, the site falls back to the Nepali text
+                when viewed in English.
+              </p>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Heading
+                </label>
+                <input
+                  type="text"
+                  value={form.heading_en}
+                  onChange={handleChange("heading_en")}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Body
+                </label>
+                <textarea
+                  value={form.body_en}
+                  onChange={handleChange("body_en")}
+                  rows={5}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3 pt-1">
@@ -134,9 +212,16 @@ function AdminPrivacy() {
               className="bg-white rounded-lg border border-gray-100 shadow-sm p-5"
             >
               <div className="flex items-start justify-between gap-3">
-                <h3 className="font-semibold text-gray-900">
-                  {section.heading}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-gray-900">
+                    {section.heading}
+                  </h3>
+                  {section.heading_en?.trim() && (
+                    <span className="text-[10px] font-medium bg-green-50 text-green-700 border border-green-200 px-1.5 py-0.5 rounded">
+                      EN
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => handleEdit(section)}
@@ -157,6 +242,24 @@ function AdminPrivacy() {
               <p className="mt-2 text-sm text-gray-600 leading-relaxed whitespace-pre-line">
                 {section.body}
               </p>
+
+              {section.heading_en?.trim() || section.body_en?.trim() ? (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-xs font-medium text-gray-400 mb-1">
+                    English
+                  </p>
+                  {section.heading_en?.trim() && (
+                    <h4 className="font-semibold text-gray-700 text-sm">
+                      {section.heading_en}
+                    </h4>
+                  )}
+                  {section.body_en?.trim() && (
+                    <p className="mt-1 text-sm text-gray-500 leading-relaxed whitespace-pre-line">
+                      {section.body_en}
+                    </p>
+                  )}
+                </div>
+              ) : null}
             </div>
           ))}
         </div>

@@ -9,11 +9,15 @@ const PrivacyContext = createContext();
 export function PrivacyProvider({ children }) {
   const [sections, setSections] = useState([]);
 
-  function addSection({ heading, body }) {
+  function addSection(section) {
     const id = sections.length ? Math.max(...sections.map((s) => s.id)) + 1 : 1;
-    const section = { id, heading, body, createdAt: new Date().toISOString() };
-    setSections((prev) => [...prev, section]);
-    return section;
+    const newSection = {
+      ...section,
+      id,
+      createdAt: new Date().toISOString(),
+    };
+    setSections((prev) => [...prev, newSection]);
+    return newSection;
   }
 
   function updateSection(id, updates) {

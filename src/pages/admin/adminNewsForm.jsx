@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { fileToDataUrl } from "../../utils/file";
-import { CATEGORIES } from "../../utils/categories";
+import { useCategories } from "../../context/CategoryContext";
+import { toDatetimeLocalValue, fromDatetimeLocalValue } from "../../utils/time";
 
 const EMPTY_FORM = {
-  category: CATEGORIES[0],
+  category: "",
   image: "",
   headline: "",
   description: "",
@@ -15,6 +16,7 @@ const EMPTY_FORM = {
   content_en: "",
   author: "",
   tagsInput: "",
+  publishedAtLocal: "",
   isBreaking: false,
   isFeatured: false,
   published: true,
@@ -37,6 +39,7 @@ function AdminNewsForm() {
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const { getNewsById, addNews, updateNews } = useNews();
+  const { enabledCategories } = useCategories();
 
   const existing = isEdit ? getNewsById(id) : null;
   const [form, setForm] = useState(
@@ -46,8 +49,9 @@ function AdminNewsForm() {
           ...existing,
           tagsInput: tagsToInput(existing.tags),
           published: existing.published !== false,
+          publishedAtLocal: toDatetimeLocalValue(existing.publishedAt),
         }
-      : EMPTY_FORM,
+      : { ...EMPTY_FORM, publishedAtLocal: toDatetimeLocalValue() },
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [activeTab, setActiveTab] = useState("ne"); // "ne" | "en"
@@ -99,8 +103,12 @@ function AdminNewsForm() {
       return;
     }
 
-    const { tagsInput, ...rest } = form;
-    const payload = { ...rest, tags: inputToTags(tagsInput) };
+    const { tagsInput, publishedAtLocal, ...rest } = form;
+    const payload = {
+      ...rest,
+      tags: inputToTags(tagsInput),
+      publishedAt: fromDatetimeLocalValue(publishedAtLocal),
+    };
 
     if (isEdit) {
       updateNews(existing.id, payload);
@@ -142,9 +150,9 @@ function AdminNewsForm() {
             onChange={handleChange("category")}
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
           >
-            {CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
+            {enabledCategories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
               </option>
             ))}
           </select>
@@ -170,17 +178,34 @@ function AdminNewsForm() {
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            लेखक
-          </label>
-          <input
-            type="text"
-            value={form.author}
-            onChange={handleChange("author")}
-            placeholder="जस्तै: रमेश श्रेष्ठ"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              लेखक
+            </label>
+            <input
+              type="text"
+              value={form.author}
+              onChange={handleChange("author")}
+              placeholder="जस्तै: रमेश श्रेष्ठ"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              प्रकाशित मिति र समय
+            </label>
+            <input
+              type="datetime-local"
+              value={form.publishedAtLocal}
+              onChange={handleChange("publishedAtLocal")}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              भविष्यको मिति राखेर समाचार तालिकाबद्ध (scheduled) राख्न सकिन्छ।
+            </p>
+          </div>
         </div>
 
         {/* Language tabs: Nepali is required/primary, English is optional. */}

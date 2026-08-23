@@ -23,24 +23,28 @@ function Trending() {
           <div className="mt-2 border-t-2 border-red-500 w-full" />
         </div>
 
-        <ul className="divide-y divide-gray-100">
-          {trendingItems.map((item, index) => (
-            <li key={item.id} className="px-4 py-3">
-              <Link
-                to={`/news/${item.id}`}
-                className="flex items-start gap-3 group"
-              >
-                <span className="text-red-600 font-bold text-sm w-4 shrink-0">
-                  {index + 1}
-                </span>
+        {trendingItems.length === 0 ? (
+          <p className="px-4 pb-4 text-sm text-gray-400">{t.trendingEmpty}</p>
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {trendingItems.map((item, index) => (
+              <li key={item.id} className="px-4 py-3">
+                <Link
+                  to={`/news/${item.id}`}
+                  className="flex items-start gap-3 group"
+                >
+                  <span className="text-red-600 font-bold text-sm w-4 shrink-0">
+                    {index + 1}
+                  </span>
 
-                <span className="text-sm text-gray-800 leading-snug group-hover:text-blue-700 transition-colors">
-                  {item.headline}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                  <span className="text-sm text-gray-800 leading-snug group-hover:text-blue-700 transition-colors">
+                    {item.headline}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </aside>
   );

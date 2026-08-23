@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAdminAuth } from "../../context/AdminAuthContext";
+import { PageHeader, FormField, FormAlert } from "../../components/admin/common";
 
 function AdminChangePassword() {
   const { changePassword } = useAdminAuth();
@@ -33,68 +34,43 @@ function AdminChangePassword() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
-        पासवर्ड परिवर्तन गर्नुहोस्
-      </h1>
+      <PageHeader title="पासवर्ड परिवर्तन गर्नुहोस्" />
 
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 max-w-md flex flex-col gap-4"
       >
-        {errorMsg && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">
-            {errorMsg}
-          </p>
-        )}
-        {successMsg && (
-          <p className="text-sm text-green-700 bg-green-50 border border-green-100 rounded px-3 py-2">
-            {successMsg}
-          </p>
-        )}
+        <FormAlert>{errorMsg}</FormAlert>
+        <FormAlert type="success">{successMsg}</FormAlert>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            हालको पासवर्ड
-          </label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-            autoComplete="current-password"
-            required
-          />
-        </div>
+        <FormField
+          label="हालको पासवर्ड"
+          type="password"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          autoComplete="current-password"
+          required
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            नयाँ पासवर्ड
-          </label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-            autoComplete="new-password"
-            minLength={6}
-            required
-          />
-        </div>
+        <FormField
+          label="नयाँ पासवर्ड"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          autoComplete="new-password"
+          minLength={6}
+          required
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            नयाँ पासवर्ड पुष्टि गर्नुहोस्
-          </label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-            autoComplete="new-password"
-            minLength={6}
-            required
-          />
-        </div>
+        <FormField
+          label="नयाँ पासवर्ड पुष्टि गर्नुहोस्"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          autoComplete="new-password"
+          minLength={6}
+          required
+        />
 
         <div className="pt-2">
           <button

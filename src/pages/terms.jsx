@@ -1,37 +1,21 @@
-import { useEffect, useState } from "react";
+import { useTerms } from "../context/TermsContext";
 import { useLang } from "../context/LanguageContext";
+import { localizeSectionList } from "../utils/localize";
 
 function TermsPage() {
-  const { t, lang } = useLang();
+  const { sections } = useTerms();
+  const { t, lang, loading, error } = useLang();
 
-  const [termsSections, setTermsSections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // termsSections now lives inside en.json/ne.json (merged there instead
+  // of a separate terms.en.json/terms.ne.json fetch), so it's already
+  // loaded by the time LanguageProvider's own `loading` flips to false —
+  // no page-local fetch/loading/error state needed anymore.
+  const termsSections = t.termsSections || [];
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    fetch(`/locales/terms.${lang}.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch terms content");
-        return res.json();
-      })
-      .then((data) => {
-        if (!cancelled) setTermsSections(data);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [lang]);
+  // Admin-added sections carry both heading/body (Nepali) and
+  // heading_en/body_en (English, optional) — localize them the same way
+  // Privacy Policy's admin sections are localized.
+  const localizedSections = localizeSectionList(sections, lang);
 
   return (
     <main className="min-h-screen mx-6">
@@ -58,7 +42,7 @@ function TermsPage() {
           {!loading &&
             !error &&
             termsSections.map((section) => (
-              <div key={section.heading}>
+              <div key={`${lang}-${section.heading}`}>
                 <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
                   {section.heading}
                 </h2>
@@ -67,6 +51,21 @@ function TermsPage() {
                 </p>
               </div>
             ))}
+
+          {sections.length > 0 && (
+            <div className="border-t border-gray-100 pt-8 flex flex-col gap-8">
+              {localizedSections.map((section) => (
+                <div key={section.id}>
+                  <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
+                    {section.heading}
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base whitespace-pre-line">
+                    {section.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>

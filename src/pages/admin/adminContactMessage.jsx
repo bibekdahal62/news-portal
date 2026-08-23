@@ -1,9 +1,21 @@
+import { useState } from "react";
+import { MdCircle, MdMailOutline } from "react-icons/md";
 import { useContactMessages } from "../../context/ContactMessageContext";
+import ContactMessageModal from "../../components/admin/ContactMessageModal";
 
 function AdminContactMessage() {
-  const { messages, deleteMessage } = useContactMessages();
+  const { messages, deleteMessage, unreadCount } = useContactMessages();
+  const [filter, setFilter] = useState("all"); // "all" | "unread"
+  const [selectedId, setSelectedId] = useState(null);
 
-  const handleDelete = (id) => {
+  const visibleMessages =
+    filter === "unread" ? messages.filter((m) => !m.read) : messages;
+
+  const selectedMessage = messages.find((m) => m.id === selectedId) || null;
+
+  const handleDelete = (e, id) => {
+    e.stopPropagation();
+
     const confirmDelete = window.confirm(
       "के तपाईं यो सन्देश हटाउन चाहनुहुन्छ?",
     );
@@ -11,69 +23,125 @@ function AdminContactMessage() {
     if (!confirmDelete) return;
 
     deleteMessage(id);
+    if (selectedId === id) setSelectedId(null);
   };
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">सम्पर्क सन्देश</h1>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">सम्पर्क सन्देश</h1>
+          <p className="text-gray-500 mt-1">
+            प्रयोगकर्ताहरूबाट प्राप्त सन्देशहरू
+          </p>
+        </div>
 
-        <p className="text-gray-500 mt-1">
-          प्रयोगकर्ताहरूबाट प्राप्त सन्देशहरू
-        </p>
+        <div className="inline-flex rounded-md border border-gray-200 bg-white p-1 text-sm">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-3 py-1.5 rounded cursor-pointer transition-colors ${
+              filter === "all"
+                ? "bg-(--primary-color) text-white"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            सबै ({messages.length})
+          </button>
+          <button
+            onClick={() => setFilter("unread")}
+            className={`px-3 py-1.5 rounded cursor-pointer transition-colors ${
+              filter === "unread"
+                ? "bg-(--primary-color) text-white"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            नपढिएको ({unreadCount})
+          </button>
+        </div>
       </div>
 
-      {messages.length === 0 ? (
+      {visibleMessages.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+          <MdMailOutline size={32} className="mx-auto text-gray-300 mb-2" />
           <p className="text-gray-500">
-            अहिलेसम्म कुनै सन्देश प्राप्त भएको छैन।
+            {filter === "unread"
+              ? "कुनै नपढिएको सन्देश छैन।"
+              : "अहिलेसम्म कुनै सन्देश प्राप्त भएको छैन।"}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {messages.map((item) => (
+        <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100 overflow-hidden">
+          {visibleMessages.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg border border-gray-200 shadow-sm p-5 hover:shadow-md transition-shadow"
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelectedId(item.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedId(item.id);
+                }
+              }}
+              className={`w-full text-left px-5 py-4 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer ${
+                !item.read ? "bg-blue-50/40" : ""
+              }`}
             >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {item.name}
-                  </h2>
+              <span
+                className="mt-1.5 shrink-0"
+                title={item.read ? "पढिएको" : "नपढिएको"}
+              >
+                <MdCircle
+                  size={9}
+                  className={item.read ? "text-gray-200" : "text-blue-500"}
+                />
+              </span>
 
-                  <p className="text-sm text-gray-500">{item.email}</p>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <p
+                    className={`text-sm truncate ${
+                      item.read
+                        ? "font-medium text-gray-700"
+                        : "font-semibold text-gray-900"
+                    }`}
+                  >
+                    {item.name}{" "}
+                    <span className="font-normal text-gray-400">
+                      · {item.email}
+                    </span>
+                  </p>
+                  <span className="text-xs text-gray-400 shrink-0">
+                    {item.date}
+                  </span>
                 </div>
-
-                <button
-                  onClick={() => handleDelete(item.id)}
-                  className="px-3 py-1.5 rounded-md bg-red-500 text-white text-xs font-medium hover:bg-red-600 cursor-pointer"
+                <p
+                  className={`text-sm mt-0.5 truncate ${
+                    item.read ? "text-gray-500" : "text-gray-800"
+                  }`}
                 >
-                  Delete
-                </button>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-gray-700">विषय</p>
-
-                <p className="text-sm text-gray-600 mt-1">{item.subject}</p>
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700">सन्देश</p>
-
-                <p className="text-sm text-gray-600 mt-1 leading-6">
+                  {item.subject}
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
                   {item.message}
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100">
-                <p className="text-xs text-gray-400">{item.date}</p>
-              </div>
+              <button
+                onClick={(e) => handleDelete(e, item.id)}
+                className="shrink-0 px-3 py-1.5 rounded-md bg-red-500 text-white text-xs font-medium hover:bg-red-600 cursor-pointer"
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>
       )}
+
+      <ContactMessageModal
+        message={selectedMessage}
+        onClose={() => setSelectedId(null)}
+      />
     </div>
   );
 }

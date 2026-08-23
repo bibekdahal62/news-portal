@@ -6,7 +6,7 @@
 }
 
 .nav-styles {
-  @apply text-white font-semibold px-5 py-3 hover:bg-red-500;
+  @apply text-white font-semibold whitespace-nowrap px-2.5 py-3 text-sm hover:bg-red-500 xl:px-5 xl:text-base;
 }
 
 .text-hover:hover {

@@ -3,10 +3,12 @@ import { useState } from "react";
 
 import { useContactMessages } from "../context/ContactMessageContext";
 import { useLang } from "../context/LanguageContext";
+import { useSettings } from "../context/SettingsContext";
 
 function ContactPage() {
   const { addMessage } = useContactMessages();
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const { settings } = useSettings();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,17 +17,29 @@ function ContactPage() {
   });
   const [submitted, setSubmitted] = useState(false);
 
+  // Phone/email are language-agnostic; address falls back to the Nepali
+  // value if no English translation was set, same convention used for
+  // admin-added Privacy/Terms sections.
+  const address =
+    lang === "en" && settings.address_en?.trim()
+      ? settings.address_en
+      : settings.address;
+
   const contactInfo = [
-    { icon: <FiPhone size={22} />, title: t.contactInfoPhone, text: t.phone },
+    {
+      icon: <FiPhone size={22} />,
+      title: t.contactInfoPhone,
+      text: settings.phone,
+    },
     {
       icon: <FiMail size={22} />,
       title: t.contactInfoEmail,
-      text: "news@newsite.com.np",
+      text: settings.email,
     },
     {
       icon: <FiMapPin size={22} />,
       title: t.contactInfoAddress,
-      text: t.location,
+      text: address,
     },
   ];
 

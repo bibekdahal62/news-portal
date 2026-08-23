@@ -60,3 +60,24 @@ export function formatViewsNe(views) {
     return `${toNepaliDigits((views / 1000).toFixed(1))} हजार`;
   return `${toNepaliDigits((views / 100000).toFixed(1))} लाख`;
 }
+
+// Converts an ISO timestamp into the "YYYY-MM-DDTHH:mm" string that an
+// <input type="datetime-local"> expects, in the browser's local time.
+// Falls back to "now" if no timestamp is given (new/unsaved items).
+export function toDatetimeLocalValue(iso) {
+  const d = iso ? new Date(iso) : new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  const mm = pad(d.getMonth() + 1);
+  const dd = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const min = pad(d.getMinutes());
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+}
+
+// Converts a "YYYY-MM-DDTHH:mm" datetime-local value back into a real ISO
+// timestamp for storage. Falls back to "now" if the value is empty/invalid.
+export function fromDatetimeLocalValue(value) {
+  const d = value ? new Date(value) : new Date();
+  return Number.isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+}

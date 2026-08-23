@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { getAdStatus } from "../utils/ads";
 
 const AdsContext = createContext();
 
@@ -14,6 +15,8 @@ export function AdsProvider({ children }) {
       active: true,
       showOnHome: true,
       showOnNews: true,
+      startDate: "",
+      endDate: "",
       createdAt: new Date().toISOString(),
       ...ad,
     };
@@ -33,7 +36,11 @@ export function AdsProvider({ children }) {
     return ads.find((a) => String(a.id) === String(id));
   }
 
-  const homeTopAds = ads.filter((a) => a.slot === "home-top" && a.active);
+  // "Live" means the schedule + active toggle both currently allow the ad
+  // to show — not just that the admin hasn't switched it off.
+  const homeTopAds = ads.filter(
+    (a) => a.slot === "home-top" && getAdStatus(a) === "active",
+  );
 
   return (
     <AdsContext.Provider
