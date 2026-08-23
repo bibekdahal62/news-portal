@@ -29,7 +29,7 @@ function NewsPage({ category, categoryKey, headingOverride }) {
         </div>
         <div className="container mx-auto mt-10 flex flex-col lg:flex-row justify-center xl:gap-10 gap-6">
           <div>
-            <div className="shadow-lg rounded-lg border border-gray-50">
+            <div className="sm:shadow-lg rounded-lg border sm:border-gray-50">
               <div className="px-10 pt-6">
                 <h3 className="text-3xl font-bold">{heading}</h3>
               </div>

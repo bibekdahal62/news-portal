@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatViewsNe } from "../utils/time";
+import { useNews } from "../context/NewsContext";
 
 function NewsCard({
   id,
@@ -13,10 +14,13 @@ function NewsCard({
   views,
   isBreaking,
 }) {
+  const { incrementViews } = useNews();
+
   return (
     <Link
       to={`/news/${id}`}
       className="block bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden no-underline hover:no-underline group hover:shadow-md transition-shadow"
+      onClick={() => incrementViews(id)}
     >
       {/* 1 + 2: Category badge + Image */}
       <div className="relative">

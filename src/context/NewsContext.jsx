@@ -77,6 +77,15 @@ export function NewsProvider({ children }) {
     );
   }
 
+  // Increments the view count for one item. Deliberately does NOT touch
+  // `updatedAt` — a view shouldn't make an article look "recently edited"
+  // in the admin panel's sort/listing.
+  function incrementViews(id) {
+    setNews((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, views: (n.views || 0) + 1 } : n)),
+    );
+  }
+
   // Looks up by id across ALL news (published or not) - the admin edit
   // form needs this to load drafts too. Public pages that use this
   // (newsDetail) are responsible for checking `.published` themselves so
@@ -149,6 +158,7 @@ export function NewsProvider({ children }) {
         updateNews,
         deleteNews,
         togglePublish,
+        incrementViews,
         getNewsById,
         getNewsByCategory,
         getTrendingNews,
