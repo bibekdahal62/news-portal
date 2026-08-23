@@ -145,8 +145,11 @@ function AdminLayout() {
   );
 
   return (
-    <div translate="no" className="min-h-screen flex bg-gray-50">
-      <aside className="hidden lg:flex w-64 shrink-0 bg-(--primary-color) text-white flex-col">
+   <div
+  translate="no"
+  className="h-screen flex bg-gray-50 overflow-hidden"
+>
+     <aside className="hidden lg:flex w-64 shrink-0 h-screen bg-(--primary-color) text-white flex-col">
         {sidebarContent}
       </aside>
 
@@ -170,7 +173,7 @@ function AdminLayout() {
         </aside>
       </div>
 
-      <div className="flex-1 min-w-0 flex flex-col">
+      <div className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
         <header className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-100 px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => setMenuOpen(true)}
@@ -182,7 +185,7 @@ function AdminLayout() {
           <p className="font-bold text-(--primary-color)">एडमिन प्यानल</p>
         </header>
 
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 overflow-y-auto">
           <div className="max-w-6xl mx-auto p-4 sm:p-6 md:p-8">
             <Outlet />
           </div>
