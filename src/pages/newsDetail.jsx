@@ -1,14 +1,10 @@
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useNews } from "../context/NewsContext";
 import { useLang } from "../context/LanguageContext";
 import { localizeNews } from "../utils/localize";
-import {
-  displayTime,
-  fullDateTimeNe,
-  formatViewsNe,
-} from "../utils/time";
+import { displayTime, fullDateTimeNe, formatViewsNe } from "../utils/time";
 
 import AdBanner from "../components/AdBanner";
 import ShareButtons from "../components/ShareButtons";
@@ -19,8 +15,19 @@ function NewsDetail() {
   const { getNewsById, loading } = useNews();
   const { lang } = useLang();
 
-
   const [isImageOpen, setIsImageOpen] = useState(false);
+
+  useEffect(() => {
+    if (isImageOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isImageOpen]);
 
   if (loading) {
     return <p className="text-center mt-10">लोड हुँदैछ...</p>;
@@ -31,14 +38,9 @@ function NewsDetail() {
   if (!rawArticle || rawArticle.published === false) {
     return (
       <main className="min-h-screen container mx-auto mt-10 px-4 text-center">
-        <h1 className="text-2xl font-bold mb-4">
-          समाचार फेला परेन
-        </h1>
+        <h1 className="text-2xl font-bold mb-4">समाचार फेला परेन</h1>
 
-        <Link
-          to="/"
-          className="text-(--primary-color) underline"
-        >
+        <Link to="/" className="text-(--primary-color) underline">
           गृहपृष्ठमा फर्कनुहोस्
         </Link>
       </main>
@@ -47,24 +49,17 @@ function NewsDetail() {
 
   const article = localizeNews(rawArticle, lang);
 
-  const body = article.content?.trim()
-    ? article.content
-    : article.description;
+  const body = article.content?.trim() ? article.content : article.description;
 
   return (
     <main className="min-h-screen mx-6">
       <section className="container mx-auto mt-12 flex flex-col xl:flex-row justify-center xl:gap-10 gap-6">
-
         <section className="shadow-lg w-full rounded-lg py-6 px-4 lg:px-10 border border-gray-100">
-
-          <div
-            className="cursor-pointer"
-            onClick={() => setIsImageOpen(true)}
-          >
+          <div className="cursor-pointer" onClick={() => setIsImageOpen(true)}>
             <img
               src={article.image}
               alt={article.headline}
-              className="w-full max-h-[500px] object-cover mt-4 rounded-lg mb-6 hover:opacity-90 transition duration-200"
+              className="w-full max-h-125 object-cover mt-4 rounded-lg mb-6 hover:opacity-90 transition duration-200"
             />
           </div>
 
@@ -85,53 +80,40 @@ function NewsDetail() {
           </h1>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-400 mb-6">
-
             {article.author && (
               <span className="text-gray-600 font-medium">
                 {article.author}
               </span>
             )}
 
-            <span title={fullDateTimeNe(article)}>
-              {displayTime(article)}
-            </span>
+            <span title={fullDateTimeNe(article)}>{displayTime(article)}</span>
 
-            {typeof article.views === "number" &&
-              article.views > 0 && (
-                <span>
-                  {formatViewsNe(article.views)} पटक हेरिएको
-                </span>
-              )}
+            {typeof article.views === "number" && article.views > 0 && (
+              <span>{formatViewsNe(article.views)} पटक हेरिएको</span>
+            )}
           </div>
 
           <p className="text-gray-700 leading-relaxed whitespace-pre-line mb-6">
             {body}
           </p>
 
-          {Array.isArray(article.tags) &&
-            article.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-6">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
+          {Array.isArray(article.tags) && article.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           <ShareButtons title={article.headline} />
 
-          <Link
-            to="/"
-            className="text-(--primary-color) underline"
-          >
-            {lang === "en"
-              ? "← Back to home"
-              : "← गृहपृष्ठमा फर्कनुहोस्"}
+          <Link to="/" className="text-(--primary-color) underline">
+            {lang === "en" ? "← Back to home" : "← गृहपृष्ठमा फर्कनुहोस्"}
           </Link>
 
           <RelatedNews
@@ -146,11 +128,7 @@ function NewsDetail() {
       </section>
 
       {isImageOpen && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setIsImageOpen(false)}
-        >
-
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 overflow-hidden">
           {/* CLOSE BUTTON */}
           <button
             type="button"
@@ -165,7 +143,7 @@ function NewsDetail() {
           <img
             src={article.image}
             alt={article.headline}
-            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            className="w-full h-full max-w-7xl max-h-[95vh] object-contain rounded-lg shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           />
         </div>
