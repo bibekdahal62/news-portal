@@ -146,30 +146,61 @@ function NewsDetail() {
       </section>
 
       {isImageOpen && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setIsImageOpen(false)}
+  <div
+    className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4"
+    onClick={() => setIsImageOpen(false)}
+  >
+    {/* TOP-RIGHT BUTTONS */}
+    <div className="absolute top-5 right-6 flex items-center gap-4 z-10">
+
+      {/* DOWNLOAD BUTTON */}
+      <a
+        href={article.image}
+        download
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="text-white hover:text-gray-300 transition cursor-pointer"
+        title={lang === "en" ? "Download image" : "तस्बिर डाउनलोड गर्नुहोस्"}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-7 h-7"
         >
+          <path d="M12 3v12" />
+          <path d="m7 10 5 5 5-5" />
+          <path d="M5 21h14" />
+        </svg>
+      </a>
 
-          {/* CLOSE BUTTON */}
-          <button
-            type="button"
-            onClick={() => setIsImageOpen(false)}
-            className="absolute top-5 right-6 text-white text-4xl font-bold hover:text-gray-300 transition cursor-pointer"
-            aria-label="Close image"
-          >
-            &times;
-          </button>
+      {/* CLOSE BUTTON */}
+      <button
+        type="button"
+        onClick={() => setIsImageOpen(false)}
+        className="text-white text-4xl font-bold hover:text-gray-300 transition cursor-pointer leading-none"
+        aria-label="Close image"
+      >
+        &times;
+      </button>
 
-          {/* FULL IMAGE */}
-          <img
-            src={article.image}
-            alt={article.headline}
-            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
+    </div>
+
+    {/* FULL IMAGE */}
+    <img
+      src={article.image}
+      alt={article.headline}
+      className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+      onClick={(e) => e.stopPropagation()}
+    />
+  </div>
+)}
+  
     </main>
   );
 }
