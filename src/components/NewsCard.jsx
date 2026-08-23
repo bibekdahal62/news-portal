@@ -24,7 +24,11 @@ function NewsCard({
     >
       {/* 1 + 2: Category badge + Image */}
       <div className="relative">
-        <img src={image} alt={headline} className="w-full h-48 object-cover" />
+        <img
+          src={image}
+          alt={headline}
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+        />
         <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
           {category}
         </span>
