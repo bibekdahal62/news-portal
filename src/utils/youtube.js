@@ -20,7 +20,7 @@ export function extractYouTubeId(url) {
 }
 
 export function youtubeEmbedUrl(videoId) {
-  return `https://www.youtube.com/embed/${videoId}`;
+  return `https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0`;
 }
 
 export function youtubeThumbnailUrl(videoId) {
