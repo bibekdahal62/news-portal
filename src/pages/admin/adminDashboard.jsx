@@ -6,6 +6,7 @@ import { useGallery } from "../../context/GalleryContext";
 import { useContactMessages } from "../../context/ContactMessageContext";
 import { useCategories } from "../../context/CategoryContext";
 import { displayTime } from "../../utils/time";
+import { PageHeader, StatCard } from "../../components/admin/common";
 import {
   MdArticle,
   MdOutlineCampaign,
@@ -16,22 +17,9 @@ import {
   MdEdit,
 } from "react-icons/md";
 
-function StatCard({ icon: Icon, label, value, to }) {
-  return (
-    <Link
-      to={to}
-      className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 flex items-center gap-4 hover:shadow-md transition-shadow"
-    >
-      <div className="w-12 h-12 rounded-full bg-(--primary-color)/10 flex items-center justify-center text-(--primary-color)">
-        <Icon size={24} />
-      </div>
-      <div>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        <p className="text-sm text-gray-500">{label}</p>
-      </div>
-    </Link>
-  );
-}
+// StatCard used to be declared right here as a local component — it now
+// lives in components/admin/common since it's a generic enough "icon +
+// number + label" tile that other pages could reuse.
 
 function AdminDashboard() {
   const { news } = useNews();
@@ -51,10 +39,10 @@ function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">ड्यासबोर्ड</h1>
-      <p className="text-gray-500 mb-6">
-        तपाईंको न्युज पोर्टलको संक्षिप्त विवरण
-      </p>
+      <PageHeader
+        title="ड्यासबोर्ड"
+        subtitle="तपाईंको न्युज पोर्टलको संक्षिप्त विवरण"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
         <StatCard

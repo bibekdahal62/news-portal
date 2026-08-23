@@ -1,30 +1,29 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useNews } from "../../context/NewsContext";
 import { useCategories } from "../../context/CategoryContext";
-import NewsPreviewModal from "../../components/admin/NewsPreviewModal";
+import { NewsPreviewModal } from "../../components/admin/PreviewModals";
 import { displayTime } from "../../utils/time";
 import {
-  MdEdit,
-  MdDeleteOutline,
-  MdVisibility,
-  MdVisibilityOff,
-  MdRemoveRedEye,
-  MdChevronLeft,
-  MdChevronRight,
-} from "react-icons/md";
+  PageHeader,
+  ListFilterBar,
+  ConfirmDialog,
+  StatusBadge,
+  ItemActions,
+  Pagination,
+} from "../../components/admin/common";
 
 const PAGE_SIZE = 8;
 
 function AdminNewsList() {
   const { news, deleteNews, togglePublish } = useNews();
+  const { categories } = useCategories();
+
   const [query, setQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [confirmId, setConfirmId] = useState(null);
   const [previewItem, setPreviewItem] = useState(null);
-  const { categories } = useCategories();
 
   const filtered = news.filter((n) => {
     const q = query.trim().toLowerCase();
@@ -65,55 +64,22 @@ function AdminNewsList() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            समाचार व्यवस्थापन
-          </h1>
-          <p className="text-gray-500">
-            जम्मा {news.length} समाचार मध्ये {filtered.length} देखाइँदै
-          </p>
-        </div>
-        <Link
-          to="/admin/news/new"
-          className="px-4 py-2 rounded-md bg-(--primary-color) text-white text-sm font-medium hover:opacity-90"
-        >
-          + नयाँ समाचार
-        </Link>
-      </div>
+      <PageHeader
+        title="समाचार व्यवस्थापन"
+        subtitle={`जम्मा ${news.length} समाचार मध्ये ${filtered.length} देखाइँदै`}
+        actionLabel="+ नयाँ समाचार"
+        actionTo="/admin/news/new"
+      />
 
-      <div className="flex flex-wrap gap-3 mb-4">
-        <input
-          type="text"
-          placeholder="शीर्षकद्वारा खोज्नुहोस्..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full max-w-sm border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color)"
-        />
-
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) text-sm"
-        >
-          <option value="all">सबै श्रेणी</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.name}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-(--primary-color) text-sm"
-        >
-          <option value="all">सबै स्थिति</option>
-          <option value="published">प्रकाशित</option>
-          <option value="draft">ड्राफ्ट</option>
-        </select>
-      </div>
+      <ListFilterBar
+        query={query}
+        onQueryChange={setQuery}
+        categoryFilter={categoryFilter}
+        onCategoryChange={setCategoryFilter}
+        categories={categories}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
+      />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
         <table className="w-full min-w-160 text-sm">
@@ -171,61 +137,18 @@ function AdminNewsList() {
                     {typeof item.views === "number" ? item.views : "—"}
                   </td>
                   <td className="px-4 py-3">
-                    {isPublished ? (
-                      <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 border border-green-200 px-2 py-1 rounded">
-                        प्रकाशित
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 border border-gray-200 px-2 py-1 rounded">
-                        ड्राफ्ट
-                      </span>
-                    )}
+                    <StatusBadge published={isPublished} variant="table" />
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <button
-                      onClick={() => setPreviewItem(item)}
-                      className="p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
-                      title="पूर्वावलोकन"
-                    >
-                      <MdRemoveRedEye size={18} />
-                    </button>
+                    <ItemActions onPreview={() => setPreviewItem(item)} />
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
-                      <button
-                        onClick={() => togglePublish(item.id)}
-                        className={
-                          isPublished
-                            ? "p-2 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
-                            : "p-2 rounded hover:bg-green-50 text-green-600 cursor-pointer"
-                        }
-                        title={
-                          isPublished
-                            ? "अप्रकाशित गर्नुहोस्"
-                            : "प्रकाशित गर्नुहोस्"
-                        }
-                      >
-                        {isPublished ? (
-                          <MdVisibilityOff size={18} />
-                        ) : (
-                          <MdVisibility size={18} />
-                        )}
-                      </button>
-                      <Link
-                        to={`/admin/news/${item.id}/edit`}
-                        className="p-2 rounded hover:bg-gray-100 text-gray-600"
-                        title="सम्पादन"
-                      >
-                        <MdEdit size={18} />
-                      </Link>
-                      <button
-                        onClick={() => setConfirmId(item.id)}
-                        className="p-2 rounded hover:bg-red-50 text-red-600 cursor-pointer"
-                        title="मेटाउनुहोस्"
-                      >
-                        <MdDeleteOutline size={18} />
-                      </button>
-                    </div>
+                    <ItemActions
+                      isPublished={isPublished}
+                      onTogglePublish={() => togglePublish(item.id)}
+                      editTo={`/admin/news/${item.id}/edit`}
+                      onDelete={() => setConfirmId(item.id)}
+                    />
                   </td>
                 </tr>
               );
@@ -246,58 +169,19 @@ function AdminNewsList() {
       </div>
 
       {filtered.length > 0 && (
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-sm text-gray-500">
-            पृष्ठ {currentPage} / {totalPages}
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="p-2 rounded border border-gray-300 text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
-              aria-label="अघिल्लो पृष्ठ"
-            >
-              <MdChevronLeft size={18} />
-            </button>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded border border-gray-300 text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
-              aria-label="अर्को पृष्ठ"
-            >
-              <MdChevronRight size={18} />
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       )}
 
-      {confirmId !== null && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-            <h3 className="font-semibold text-gray-900 mb-2">
-              मेटाउने पुष्टि गर्नुहोस्
-            </h3>
-            <p className="text-sm text-gray-500 mb-5">
-              के तपाईं यो समाचार मेटाउन निश्चित हुनुहुन्छ? यो कार्य फिर्ता गर्न
-              सकिँदैन।
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setConfirmId(null)}
-                className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-50 cursor-pointer"
-              >
-                रद्द गर्नुहोस्
-              </button>
-              <button
-                onClick={() => handleDelete(confirmId)}
-                className="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700 cursor-pointer"
-              >
-                मेटाउनुहोस्
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={confirmId !== null}
+        message="के तपाईं यो समाचार मेटाउन निश्चित हुनुहुन्छ? यो कार्य फिर्ता गर्न सकिँदैन।"
+        onCancel={() => setConfirmId(null)}
+        onConfirm={() => handleDelete(confirmId)}
+      />
 
       {previewItem && (
         <NewsPreviewModal

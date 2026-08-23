@@ -11,7 +11,7 @@ import {
   MdDragIndicator,
   MdRemoveRedEye,
 } from "react-icons/md";
-import GalleryPreviewModal from "../../components/admin/GalleryPreviewModal";
+import { GalleryPreviewModal } from "../../components/admin/PreviewModals";
 
 const EMPTY_FORM = {
   title: "",

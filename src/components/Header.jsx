@@ -296,17 +296,6 @@ function Header() {
                     >
                       {t.contact}
                     </Link>
-
-                    <Link
-                      to="/admin"
-                      className="block nav-styles"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        setMoreOpen(false);
-                      }}
-                    >
-                      एडमिन
-                    </Link>
                   </div>
                 )}
               </div>

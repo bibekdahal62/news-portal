@@ -76,7 +76,7 @@ function AdminLayout() {
       <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between">
         <div>
           <p className="text-lg font-bold">एडमिन प्यानल</p>
-          <p className="text-xs text-white/70">News Portal Admin</p>
+          <p className="text-xs text-white/70">Gurukul TV Admin</p>
         </div>
         <button
           onClick={() => setMenuOpen(false)}
