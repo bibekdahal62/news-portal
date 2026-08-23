@@ -41,7 +41,7 @@ function HomePage() {
           <div>
             {!loading && !error && (
               <div>
-                <div className="sm:shadow-lg rounded-lg border sm:border-gray-50">
+                <div className="sm:shadow-lg rounded-lg sm:border sm:border-gray-50">
                   <div className="px-10 py-6">
                     <h3 className="text-3xl font-bold text-center sm:text-left">
                       {t.featuredNews}
