@@ -34,7 +34,7 @@ function AdminLogin() {
         <div className="mb-4">
           <FormField
             label="प्रयोगकर्ता नाम"
-            type="text"
+            type="email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"

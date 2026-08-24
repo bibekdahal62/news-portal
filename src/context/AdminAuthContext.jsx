@@ -14,7 +14,7 @@ const AdminAuthContext = createContext();
 // admin pages in the SAME tab, but are cleared the moment the tab is closed,
 // and are never shared across tabs/devices. No news/ads/video data is
 // stored this way — only these auth-related values.
-const DEMO_ADMIN_USERNAME = "admin";
+const DEMO_ADMIN_USERNAME = "admin@gmail.com";
 const DEFAULT_ADMIN_PASSWORD = "admin123";
 
 const SESSION_KEY = "np_admin_session";
